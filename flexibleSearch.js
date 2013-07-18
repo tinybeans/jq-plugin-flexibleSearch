@@ -5,11 +5,11 @@
  *
  * Since  : 2010-11-12
  * Update : 2010-12-21
- * Version: 1.00
- * Comment: 
- * 
- * Maybe... jQuery 1.3.x later 
- * 
+ * Version: 1.0.0
+ * Comment:
+ *
+ * Maybe... jQuery 1.3.x later
+ *
  */
 
 (function($){
@@ -51,7 +51,7 @@
         // -------------------------------------------------
         //  検索ボックス、ボタン、ローディング画像を挿入
         // -------------------------------------------------
-        
+
         // -------------------------------------------------
         //  検索対象を絞り込むセレクトボックスやinput:hiddenを生成
         // -------------------------------------------------
@@ -97,10 +97,10 @@
         } else {
             $self.append($elems.loading, refineContainer);
         }
-        
+
         // 絞り込みするボックスを検索窓の後ろへ移動
         $("#" + op.vars.refine_container).insertAfter(ids.keyword);
-        
+
         // 検索結果を表示するボックスを挿入
         $(ids.resultTarget)[op.resultBoxInsert]($elems.result);
 
@@ -140,13 +140,13 @@
                 }
 
                 $(ids.keyword).keyup(function(e){
-                    var keycode = e.which || e.keyCode; 
+                    var keycode = e.which || e.keyCode;
                     if (keycode == "13") {
                         e.preventDefault();
                         $searchSubmit.click();
                     }
                 });
-                
+
                 // -------------------------------------------------
                 //  ブラウザの「戻る」「進む」対応 - hashchange.js
                 // -------------------------------------------------
@@ -216,13 +216,13 @@
             // -------------------------------------------------
             //  検索の初期化
             // -------------------------------------------------
-            
+
             // cookieが有効の場合に前の検索状態を再現する
             if (cookieEnable && mode == "read") {
                 // キーワードをセット
                 $(ids.keyword).val(getCookie("fs-keyword" + timestamp));
 // console.debug("fs-keyword" + timestamp + " : " + getCookie("fs-keyword" + timestamp));
-                
+
                 // 絞り込みhiddenにセット
                 var cookieHidden = getCookie("fs-refine-hidden" + timestamp).split(",");
 // console.debug("fs-refine-hidden" + timestamp + " : " + getCookie("fs-refine-hidden" + timestamp));
@@ -232,7 +232,7 @@
                         $("#" + op.vars.refine_hidden + "-" + cookieHidden[i]).val(cookieHidden[i + 1]);
                     }
                 }
-    
+
                 // セレクトフィールドを選択
                 var cookieSelect = getCookie("fs-refine-select" + timestamp).split(",");
 // console.debug("fs-refine-select" + timestamp + " : " + getCookie("fs-refine-select" + timestamp));
@@ -264,7 +264,7 @@
             // -------------------------------------------------
             //  input#fs-refine-hidden-fooによる絞り込み検索
             // -------------------------------------------------
-            
+
             // 値がある絞り込み検索フィールドのオブジェクトを生成
             var refineHidden = [],
                 refineCookie = [];
@@ -318,7 +318,7 @@
                     if (value != "") {
                         selectField.push({
                             "key"  : value, // ex. title
-                            "name" : $(this).text() // ex. タイトル 
+                            "name" : $(this).text() // ex. タイトル
                         });
                     }
                 });
@@ -344,7 +344,7 @@
             // -------------------------------------------------
             //  通常の検索を実行
             // -------------------------------------------------
-            
+
             if (normalSearch) {
                 result = $.grep(result, function(obj, i){
                     return searchCore(obj,keywords,null,false);
@@ -354,7 +354,7 @@
             // -------------------------------------------------
             //  キーワードからiオプションフラグを削除する
             // -------------------------------------------------
-            
+
             for (var i = -1, n = keywords.length; ++i < n;) {
                 keywords[i] = keywords[i].replace(/^_i_/,"");
             }
@@ -430,7 +430,7 @@
                     if (pnPageCount > 1) {
                         var pnNavi = [],
                             separator = op.paginateSeparator;
-    
+
                         function createPaginate(i,separator) {
                             var classname = "";
                             if (i == 0) {
@@ -441,23 +441,23 @@
                             }
                             return separator + "<a id='" + op.vars.link + "-" + p + "' href='#" + op.vars.page + "-" + p + "' class='" + op.vars.link + classname + "'>" + p + "</a>";
                         }
-    
+
                         for (var i = -1; ++i < pnPageCount;) {
                             var p = i + 1;
                             pnNavi[i] = createPaginate(i,separator);
-                        }    
+                        }
 
                         pnNavi.unshift("<span id='" + op.vars.link_prev + "' class='" + op.vars.hidden + "'>&lt; <a href='javascript:void(0);' class='" + op.vars.link + " " + op.vars.page_order + "'>前の" + pnCountInPage + "件</a>" + separator + "</span>");
                         pnNavi.push("<span id='" + op.vars.link_next + "'>" + separator + "<a href='javascript:void(0);' class='" + op.vars.link + " " + op.vars.page_order + "'>次の" + pnCountInPage + "件</a> &gt;</span>");
 
                         pnNavi.unshift("<p id='" + op.vars.page_navi + "' class='" + op.vars.no_page + op.vars.page_navi_c + "'>"); // #fs-page-navi a にクリックイベントをイベントをバインドしている
                         pnNavi.push("</p>");
-    
+
                         resultItem.push(pnNavi.join(""));
                     }
                 }
             }
-            
+
             // -------------------------------------------------
             //  検索結果メッセージを作成
             // -------------------------------------------------
@@ -511,7 +511,7 @@
             $(ids.resultTarget).children().not("#" + op.vars.result_container).addClass(op.vars.hidden);
             resultItem.unshift(resultMsg.join(""));
             $("#" + op.vars.result)[0].innerHTML = resultItem.join("");
-            
+
             // 必要であればcloseボタンを設置
             if (op.closeBtnCreate) {
                 $("#" + op.vars.result).append($elems.close);
@@ -523,13 +523,13 @@
             // -------------------------------------------------
             //  イベントをバインド
             // -------------------------------------------------
-            
+
             // Closeボタンをクリックしたとき
             $elems.close.children("a").click(function(){
                 $("#" + op.vars.result_container)[op.closeBtnEffect]();
                 smoothScroll(this.hash);
             });
-    
+
             // Paginateのページ数をクリックしたとき
             $("#" + op.vars.page_navi + " a").not("." + op.vars.page_order).click(function(e){
                 e.preventDefault();
@@ -630,7 +630,7 @@
             }
             return "";
         }
-        
+
         // 検索を実行する
         function searchCore(obj,kws,field,refineType){
             var matched = 0;
@@ -656,7 +656,7 @@
             }
             return matched == kws.length;
         }
-        
+
         // スルスルスクロール
         function smoothScroll(selector) {
             var targetElem = $(selector).offset();
@@ -712,7 +712,7 @@
         vars             : {
                             "loading"            : "fs-loading",
                             "hidden"             : "fs-hidden",
-                                                 
+
                             "result_container"   : "fs-result-container",
                             "result_container_c" : "",
                             "result"             : "fs-result",
@@ -723,12 +723,12 @@
                             "result_msg_refine_c": "",
                             "result_close"       : "fs-result-close",
                             "result_close_c"     : "",
-                                                 
+
                             "refine_container"   : "fs-refine-container",
                             "refine_container_c" : "",
                             "refine_select"      : "fs-refine-select",
                             "refine_hidden"      : "fs-refine-hidden",
-                                                 
+
                             "page_order"         : "fs-page-order",
                             "page_navi"          : "fs-page-navi",
                             "page_navi_c"        : "",
@@ -736,12 +736,12 @@
                             "first_page"         : "first-page",
                             "last_page"          : "last-page",
                             "no_page"            : "fs-no-page",
-                                                 
+
                             "link"               : "fs-link",
                             "link_prev"          : "fs-link-prev",
                             "link_next"          : "fs-link-next",
                             "link_current"       : "fs-link-current",
-                                                 
+
                             "scroll_target"      : "fs-result-container"
                         }
     };
