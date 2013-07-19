@@ -1,13 +1,14 @@
 /*
  * flexibleSearch.js
  *
- * Copyright (c) 2010 Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
+ * Copyright (c) Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
  *
  * Since  : 2010-11-12
- * Update : 2010-12-21
+ * Update : 2013-07-19
  * Version: 1.0.0
  * Comment:
  *
+ * You need to include "mustache.js" before "flexibleSearch.js".
  * Maybe... jQuery 1.3.x later
  *
  */
