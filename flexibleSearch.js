@@ -748,7 +748,12 @@
     };
 })(jQuery);
 
+
 // $.browser.msie and $.browser.version on jQuery 1.9.x
+jQuery.browser={};(function(){jQuery.browser.msie=false;
+jQuery.browser.version=0;if(navigator.userAgent.match(/MSIE ([0-9]+)\./)){
+jQuery.browser.msie=true;jQuery.browser.version=RegExp.$1;}})();
+
 /*
  * jQuery hashchange event - v1.3 - 7/21/2010
  * http://benalman.com/projects/jquery-hashchange-plugin/
