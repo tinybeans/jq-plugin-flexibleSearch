@@ -8,7 +8,7 @@
  * Version: 1.0.0
  * Comment:
  *
- * You need to include "mustache.js" before "flexibleSearch.js".
+ * You must need to include "mustache.js" before "flexibleSearch.js".
  * Maybe... jQuery 1.3.x later
  *
  */
