@@ -80,7 +80,7 @@
         var searchFormHTML = [
             '<form action="{{action}}" method="GET">',
                 '<input type="hidden" name="flexiblesearch" value="1">', // This element is required.
-                '<input type="hidden" name="offset" value="1">',
+                '<input type="hidden" name="offset" value="0">',
                 '<input type="hidden" name="limit" value="' + op.paginate.count + '">',
                 '<input type="search" name="search" placeholder="{{searchPlaceholder}}" class="fs-text fs-search">',
                 '<input type="submit" value="{{submitBtnText}}" class="fs-btn fs-submit">',
@@ -234,7 +234,7 @@
 
         // Bind an event handler to the submit event
         var $form = $this.find("form").eq(0).on("submit", function(e){
-            $(this).find("[name='offset']").val(1);
+            $(this).find("[name='offset']").val(0);
             var $search = $(this).find("[name='search']");
             $search.val($.trim($search.val().replace("　", " ")));
             // var query = $(this).serialize();
@@ -243,8 +243,8 @@
         // Set values to Search Form
         var searchWords = [];
         var paramObj = {};
-        var offset = 1 - 0;
-        var limit = 10 - 0;
+        var offset = 0;
+        var limit = 10;
         var _paramAry = paramStr.split(/&|%26/);
 
         for (var i = -1, n = _paramAry.length; ++i < n;) {
@@ -255,7 +255,7 @@
             if (value != "" && keyLower == "search") {
                 searchWords = value.split("+");
             }
-            else if (keyLower == "offset" && value != 1) {
+            else if (keyLower == "offset" && value != 0) {
                 offset = value;
             }
             else if (keyLower == "limit" && value != 10) {
@@ -333,14 +333,14 @@
                 }
 
                 // Paginate
-                var limitIdx = Number(limit) + Number(offset) - 1;
+                var limitIdx = Number(limit) + Number(offset);
                 var currentPage = Math.ceil(offset / limit);
+                currentPage++;
                 var resultItems = (dataApi == true) ? cloneItems : $.grep(cloneItems, function(item, i){
-                    var counter = i + 1;
-                    if (counter < offset) {
+                    if (i < offset) {
                         return false;
                     }
-                    if (counter > limitIdx) {
+                    if (i >= limitIdx) {
                         return false;
                     }
                     return true;
@@ -390,7 +390,6 @@
                     e.preventDefault();
                     var page = $(this).attr("title");
                     var offset = (Number(page) - 1) * Number(limit);
-                    offset++;
                     offset = "offset=" + offset;
                     var url = location.href.split("?");
                     var query = url[1].replace(/offset=[0-9]+/, offset);
