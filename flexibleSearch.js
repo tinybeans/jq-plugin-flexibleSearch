@@ -261,7 +261,8 @@
 
         for (var i = -1, n = _paramAry.length; ++i < n;) {
             var key = _paramAry[i].split("=")[0];
-            var value = decodeURIComponent(_paramAry[i].split("=")[1]);
+            var value = _paramAry[i].split("=")[1];
+            value = (value == "+") ? "" : decodeURIComponent(value);
             // Set "paramObj" and "searchWords"
             var keyLower = key.toLowerCase();
             if (value != "" && keyLower == "search") {
