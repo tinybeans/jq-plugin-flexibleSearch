@@ -207,7 +207,7 @@
         // Set jsonPath
         var jsonPath = "";
         var dataId = ""
-        var dataApi = false;
+        var dataApi = 0;
         switch (typeof op.searchDataPath) {
             case "string":
                 jsonPath = op.searchDataPath;
@@ -220,14 +220,26 @@
                 else {
                     jsonPath = op.searchDataPath[dataId[1]];
                 }
-                if (/^api_/.test(dataId[1])) {
-                    dataApi = true;
+                if (/^api_/.test(dataId[1]) || /^api1_/.test(dataId[1])) {
+                    dataApi = 1;
+                }
+                else if (/^api2_/.test(dataId[1])) {
+                    dataApi = 2;
                 }
                 break;
         }
-        if (/DataAPI=1/i.test(paramStr) || dataApi == true) {
-            dataApi = true;
-            var dataApiParam = paramStr.replace(/search=([^+]+)([^&]*)/, "search=$1");
+
+        var dataApiParam = "";
+        if (/DataAPI=1/i.test(paramStr) || dataApi == 1) {
+            dataApi = 1;
+            dataApiParam = paramStr.replace(/([\?&])(search=[^+&]+)([^&]*)/, "$1$2");
+            jsonPath = (jsonPath.indexOf("?") == -1) ? jsonPath + "?" + dataApiParam
+                                                     : jsonPath + "&" + dataApiParam;
+        }
+        else if (/DataAPI=2/i.test(paramStr) || dataApi == 2) { // No limit
+            dataApi = 2;
+            dataApiParam = paramStr.replace(/([\?&])(search=[^+&]+)([^&]*)/, "$1$2");
+            dataApiParam = dataApiParam.replace(/([\?&])(limit=[^+&]+)/, "");
             jsonPath = (jsonPath.indexOf("?") == -1) ? jsonPath + "?" + dataApiParam
                                                      : jsonPath + "&" + dataApiParam;
         }
@@ -315,10 +327,12 @@
 
                 // Perform a search
 
-                if (dataApi == false/* || noLimit == true*/) {
+                if (dataApi == 0) {
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonAdvancedSearch (item, paramObj);
                     });
+                }
+                if (dataApi == 0 || dataApi == 2) {
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonKeywordsSearch (item, searchWords);
                     });
@@ -336,7 +350,7 @@
                 var limitIdx = Number(limit) + Number(offset);
                 var currentPage = Math.ceil(offset / limit);
                 currentPage++;
-                var resultItems = (dataApi == true) ? cloneItems : $.grep(cloneItems, function(item, i){
+                var resultItems = (dataApi == 1) ? cloneItems : $.grep(cloneItems, function(item, i){
                     if (i < offset) {
                         return false;
                     }
