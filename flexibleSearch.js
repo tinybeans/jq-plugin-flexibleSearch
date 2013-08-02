@@ -330,7 +330,7 @@
 
                 if (dataApi == 0) {
                     cloneItems = $.grep(cloneItems, function(item, i){
-                        return jsonAdvancedSearch (item, paramObj);
+                        return jsonAdvancedSearch (item, paramObj, "like");
                     });
                 }
                 if (dataApi == 0 || dataApi == 2) {
@@ -419,23 +419,33 @@
         // -------------------------------------------------
 
         function jsonAdvancedSearch (obj, paramObj, matchType) {
+            var matched = false;
             if (matchType == "like") {
                 for (var key in paramObj) {
                     var reg = new RegExp(paramObj[key], "i");
-                    if (obj[key] && reg.test(obj[key])) {
+                    if (typeof obj[key] == "string" && reg.test(obj[key])) {
                         return true;
                     }
-                    else {
-                        return false;
-                    }
+                    // else if (obj[key] && typeof obj[key] == "object" && obj[key].length) {
+                    //     for (var i = -1, n = obj[key].length; ++i < n;) {
+                    //         if (reg.test(obj[key])) return true;
+                    //     }
+                    // }
                 }
             }
             else {
                 for (var key in paramObj) {
-                    if (obj[key] && obj[key] != paramObj[key]) return false;
+                    if (obj[key] && typeof obj[key] == "string" && obj[key] != paramObj[key]) {
+                        return false
+                    }
+                    // else if (obj[key] && typeof obj[key] == "object" && obj[key].length) {
+                    //     for (var i = -1, n = obj[key].length; ++i < n;) {
+                    //         return paramObj[key] == obj[key][i];
+                    //     }
+                    // }
                 }
             }
-            return true;
+            return matched;
         }
 
         function jsonKeywordsSearch (obj, keywordsArray) {
