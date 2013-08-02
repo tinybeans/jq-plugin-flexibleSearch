@@ -60,6 +60,7 @@
             '<div class="fs-advanced-text"{{^select}} style="display:none;"{{/select}}>',
             '{{#select}}',
                 '<select name="{{name}}"{{#size}} size="{{size}}"{{/size}}{{#multiple}} multiple{{/multiple}} class="fs-select">',
+                    '<option value=""></option>',
                     '{{#option}}',
                     '<option value="{{.}}">{{.}}</option>',
                     '{{/option}}',
