@@ -303,6 +303,9 @@
                             if ($(this).val() == value) {
                                 $(this).prop("selected", true);
                             }
+                            else if (value == "" && $(this).val() == " ") {
+                                $(this).prop("selected", true);
+                            }
                         });
                     break;
                 } // switch
