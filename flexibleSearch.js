@@ -253,6 +253,15 @@
             // var query = $(this).serialize();
         });
 
+        // Set parameter list to exclude from search.
+        var excludeParams = ["search", "flexiblesearch", "dataid", "dataapi", "offset", "limit"];
+        if (op.excludeParams != "") {
+            var opExcludeParams = op.excludeParams.toLowerCase().split(",");
+            for (var i = -1, n = opExcludeParams.length; ++i < n;) {
+                excludeParams.push($.trim(opExcludeParams));
+            }
+        }
+
         // Set values to Search Form
         var searchWords = [];
         var paramObj = {};
@@ -274,9 +283,6 @@
             }
             else if (keyLower == "limit" && value != 10) {
                 limit = value;
-            }
-            else if (value != "" && keyLower != "flexiblesearch" && keyLower != "dataapi" && keyLower != "limit") {
-                paramObj[key] = value;
             }
 
             // Reproduce search condition
@@ -311,6 +317,10 @@
                     break;
                 } // switch
             }); // each
+            if (value != "") {
+                if ($.inArray(keyLower, excludeParams) != -1) continue;
+                paramObj[key] = value;
+            }
         } // for
 
         // -------------------------------------------------
@@ -331,8 +341,11 @@
                 });
 
                 // Perform a search
-
-                if (dataApi == 0) {
+                var isParamObj = false;
+                for (var key in paramObj) {
+                    isParamObj = true;
+                }
+                if (dataApi == 0 && isParamObj) {
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonAdvancedSearch (item, paramObj, "like");
                     });
@@ -503,6 +516,8 @@
         paginate: {
             count: 10,
             paginateId : "fs-paginate"
-        }
+        },
+
+        excludeParams: "" // This is an optional parameter. The comma separated parameter list to exclude from search.
     };
 })(jQuery);
