@@ -343,7 +343,13 @@
                 }
 
                 // Set totalResults
-                var totalResults = (json.totalResults) ? json.totalResults : cloneItems.length;
+                var totalResults = 0;
+                if (dataApi == 0 && dataApi == 2) {
+                    totalResults = cloneItems.length;
+                }
+                else if (dataApi == 1) {
+                    totalResults = json.totalResults;
+                }
 
                 // Result count
                 var resultJSON = {
