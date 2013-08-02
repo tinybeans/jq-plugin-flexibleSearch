@@ -358,7 +358,7 @@
 
                 // Set totalResults
                 var totalResults = 0;
-                if (dataApi == 0 && dataApi == 2) {
+                if (dataApi == 0 || dataApi == 2) {
                     totalResults = cloneItems.length;
                 }
                 else if (dataApi == 1) {
