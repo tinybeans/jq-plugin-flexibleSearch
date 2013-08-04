@@ -319,10 +319,26 @@
             }); // each
             if (value != "") {
                 if ($.inArray(keyLower, excludeParams) != -1) continue;
-                paramObj[key] = value;
+                if (key.indexOf("[]") != -1) {
+                    key = key.replace("[]", "");
+                    if (paramObj[key]) {
+                        paramObj[key].push(value);
+                    }
+                    else {
+                        paramObj[key] = [value];
+                    }
+                }
+                else {
+                    paramObj[key] = value;
+                }
             }
         } // for
 
+        // Set paramKeyCount
+        var paramKeyCount = 0;
+        for (var key in paramObj) {
+            paramKeyCount++;
+        }
         // -------------------------------------------------
         //  Main
         // -------------------------------------------------
@@ -347,7 +363,7 @@
                 }
                 if (dataApi == 0 && isParamObj) {
                     cloneItems = $.grep(cloneItems, function(item, i){
-                        return jsonAdvancedSearch (item, paramObj, "like");
+                        return jsonAdvancedSearch (item, paramObj, paramKeyCount, "like");
                     });
                 }
                 if (dataApi == 0 || dataApi == 2) {
@@ -441,20 +457,27 @@
         //  Functions
         // -------------------------------------------------
 
-        function jsonAdvancedSearch (obj, paramObj, matchType) {
-            var matched = false;
+        function jsonAdvancedSearch (obj, paramObj, paramKeyCount, matchType) {
+            var matched = 0;
             if (matchType == "like") {
                 for (var key in paramObj) {
-                    var reg = new RegExp(paramObj[key], "i");
-                    if (typeof obj[key] == "string" && reg.test(obj[key])) {
-                        return true;
+                    if (typeof paramObj[key] == "string") {
+                        paramObj[key] = [ paramObj[key] ];
                     }
-                    // else if (obj[key] && typeof obj[key] == "object" && obj[key].length) {
-                    //     for (var i = -1, n = obj[key].length; ++i < n;) {
-                    //         if (reg.test(obj[key])) return true;
-                    //     }
-                    // }
+                    for (var i = -1, n = paramObj[key].length; ++i < n;) {
+                        var reg = new RegExp(paramObj[key][i], "i");
+                        if (typeof obj[key] == "string" && reg.test(obj[key])) {
+                            matched++;
+                            break;
+                        }
+                        // else if (obj[key] && typeof obj[key] == "object" && obj[key].length) {
+                        //     for (var i = -1, n = obj[key].length; ++i < n;) {
+                        //         if (reg.test(obj[key])) return true;
+                        //     }
+                        // }
+                    }
                 }
+                return matched == paramKeyCount;
             }
             else {
                 for (var key in paramObj) {
