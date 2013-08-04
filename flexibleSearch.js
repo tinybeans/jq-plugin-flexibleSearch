@@ -159,7 +159,9 @@
 
         // Search Form HTML
         searchFormHTML = op.searchForm.html ? op.searchForm.html : Mustache.render(searchFormHTML.join(""), op.searchForm);
-        if (searchFormHTML) $this[0].innerHTML = searchFormHTML;
+        if (searchFormHTML) {
+            $this[0].innerHTML = searchFormHTML
+        }
 
         // Get query
         var paramStr = decodeURIComponent(location.search.replace(/^\?/, ""));
