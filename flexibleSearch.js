@@ -286,7 +286,7 @@
             }
 
             // Reproduce search condition
-            $("[name='" + key + "']").each(function(){
+            $this.find("[name='" + key + "']").each(function(){
                 var tagname = this.tagName.toLowerCase();
                 switch (tagname) {
                     case "input":
