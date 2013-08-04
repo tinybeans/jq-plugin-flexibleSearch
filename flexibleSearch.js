@@ -162,7 +162,7 @@
         if (searchFormHTML) $this[0].innerHTML = searchFormHTML;
 
         // Get query
-        var paramStr = location.search.replace(/^\?/, "");
+        var paramStr = decodeURIComponent(location.search.replace(/^\?/, ""));
         if (! /flexibleSearch=1/i.test(paramStr)) {
             switch (typeof op.searchDataPathPreload) {
                 case "string":
@@ -272,7 +272,7 @@
         for (var i = -1, n = _paramAry.length; ++i < n;) {
             var key = _paramAry[i].split("=")[0];
             var value = _paramAry[i].split("=")[1];
-            value = (value == "+") ? "" : decodeURIComponent(value);
+            value = (value == "+") ? "" : value; // If value is " ", it is "+" on URL.
             // Set "paramObj" and "searchWords"
             var keyLower = key.toLowerCase();
             if (value != "" && keyLower == "search") {
