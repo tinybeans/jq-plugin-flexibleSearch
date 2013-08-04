@@ -160,7 +160,7 @@
         // Search Form HTML
         searchFormHTML = op.searchForm.html ? op.searchForm.html : Mustache.render(searchFormHTML.join(""), op.searchForm);
         if (searchFormHTML) {
-            $this[0].innerHTML = searchFormHTML
+            $this[0].innerHTML = searchFormHTML;
         }
 
         // Get query
@@ -209,7 +209,7 @@
 
         // Set jsonPath
         var jsonPath = "";
-        var dataId = ""
+        var dataId = "";
         var dataApi = 0;
         switch (typeof op.searchDataPath) {
             case "string":
@@ -248,7 +248,7 @@
         }
 
         // Bind an event handler to the submit event
-        var $form = $this.find("form").eq(0).on("submit", function(e){
+        $this.find("form").eq(0).on("submit", function(){
             $(this).find("[name='offset']").val(0);
             var $search = $(this).find("[name='search']");
             $search.val($.trim($search.val().replace("　", " ")));
@@ -257,7 +257,7 @@
 
         // Set parameter list to exclude from search.
         var excludeParams = ["search", "flexiblesearch", "dataid", "dataapi", "offset", "limit"];
-        if (op.excludeParams != "") {
+        if (op.excludeParams !== "") {
             var opExcludeParams = op.excludeParams.toLowerCase().split(",");
             for (var i = -1, n = opExcludeParams.length; ++i < n;) {
                 excludeParams.push($.trim(opExcludeParams));
@@ -277,13 +277,13 @@
             value = (value === "+") ? "" : value; // If value is " ", it is "+" on URL.
             // Set "paramObj" and "searchWords"
             var keyLower = key.toLowerCase();
-            if (value != "" && keyLower === "search") {
+            if (value !== "" && keyLower === "search") {
                 searchWords = value.split("+");
             }
-            else if (keyLower === "offset" && value != 0) {
+            else if (keyLower === "offset" && value !== 0) {
                 offset = value;
             }
-            else if (keyLower === "limit" && value != 10) {
+            else if (keyLower === "limit" && value !== 10) {
                 limit = value;
             }
 
@@ -319,9 +319,11 @@
                     break;
                 } // switch
             }); // each
-            if (value != "") {
-                if ($.inArray(keyLower, excludeParams) != -1) continue;
-                if (key.indexOf("[]") != -1) {
+            if (value !== "") {
+                if ($.inArray(keyLower, excludeParams) !== -1) {
+                    continue;
+                }
+                if (key.indexOf("[]") !== -1) {
                     key = key.replace("[]", "");
                     if (paramObj[key]) {
                         paramObj[key].push(value);
@@ -386,7 +388,7 @@
                 // Result count
                 var resultJSON = {
                     "totalResults": totalResults
-                }
+                };
 
                 // Paginate
                 var limitIdx = Number(limit) + Number(offset);
@@ -416,7 +418,7 @@
                         }
                     },
                     paginateId: op.paginate.paginateId
-                }
+                };
                 paginateHTML = Mustache.render(paginateHTML.join(""), paginate);
 
                 // Result message
@@ -433,7 +435,7 @@
                 };
                 resultMsgHTML = Mustache.render(resultMsgHTML.join(""), resultMsgJSON);
                 // Result items
-                resultJSON["items"] = resultItems;
+                resultJSON.items = resultItems;
 
                 // Show result
                 resultItemHTML = Mustache.render(resultItemHTML.join(""), resultJSON);
@@ -483,8 +485,8 @@
             }
             else {
                 for (var key in paramObj) {
-                    if (obj[key] && typeof obj[key] === "string" && obj[key] != paramObj[key]) {
-                        return false
+                    if (obj[key] && typeof obj[key] === "string" && obj[key] !== paramObj[key]) {
+                        return false;
                     }
                     // else if (obj[key] && typeof obj[key] === "object" && obj[key].length) {
                     //     for (var i = -1, n = obj[key].length; ++i < n;) {
