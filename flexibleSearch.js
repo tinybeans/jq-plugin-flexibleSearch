@@ -217,7 +217,7 @@
                 break;
             case "object":
                 dataId = paramStr.match(/DataId=(\w+)/i);
-                if (dataId == null) {
+                if (dataId === null) {
                     break;
                 }
                 else {
@@ -233,17 +233,17 @@
         }
 
         var dataApiParam = "";
-        if (/DataAPI=1/i.test(paramStr) || dataApi == 1) {
+        if (/DataAPI=1/i.test(paramStr) || dataApi === 1) {
             dataApi = 1;
             dataApiParam = paramStr.replace(/([\?&])(search=[^+&]+)([^&]*)/, "$1$2");
-            jsonPath = (jsonPath.indexOf("?") == -1) ? jsonPath + "?" + dataApiParam
+            jsonPath = (jsonPath.indexOf("?") === -1) ? jsonPath + "?" + dataApiParam
                                                      : jsonPath + "&" + dataApiParam;
         }
-        else if (/DataAPI=2/i.test(paramStr) || dataApi == 2) { // No limit
+        else if (/DataAPI=2/i.test(paramStr) || dataApi === 2) { // No limit
             dataApi = 2;
             dataApiParam = paramStr.replace(/([\?&])(search=[^+&]+)([^&]*)/, "$1$2");
             dataApiParam = dataApiParam.replace(/([\?&])(limit=[^+&]+)/, "");
-            jsonPath = (jsonPath.indexOf("?") == -1) ? jsonPath + "?" + dataApiParam
+            jsonPath = (jsonPath.indexOf("?") === -1) ? jsonPath + "?" + dataApiParam
                                                      : jsonPath + "&" + dataApiParam;
         }
 
@@ -274,16 +274,16 @@
         for (var i = -1, n = _paramAry.length; ++i < n;) {
             var key = _paramAry[i].split("=")[0];
             var value = _paramAry[i].split("=")[1];
-            value = (value == "+") ? "" : value; // If value is " ", it is "+" on URL.
+            value = (value === "+") ? "" : value; // If value is " ", it is "+" on URL.
             // Set "paramObj" and "searchWords"
             var keyLower = key.toLowerCase();
-            if (value != "" && keyLower == "search") {
+            if (value != "" && keyLower === "search") {
                 searchWords = value.split("+");
             }
-            else if (keyLower == "offset" && value != 0) {
+            else if (keyLower === "offset" && value != 0) {
                 offset = value;
             }
-            else if (keyLower == "limit" && value != 10) {
+            else if (keyLower === "limit" && value != 10) {
                 limit = value;
             }
 
@@ -293,14 +293,14 @@
                 switch (tagname) {
                     case "input":
                         var type = $(this).attr('type');
-                        if (type == "checkbox" && $(this).val() == value) {
+                        if (type === "checkbox" && $(this).val() === value) {
                             $(this).prop("checked", true);
                         }
-                        else if (type == "radio" && $(this).val() == value) {
+                        else if (type === "radio" && $(this).val() === value) {
                             $(this).prop("checked", true);
                         }
-                        else if (type == "text" || type == "search" || type == "hidden") {
-                            if (key == "search") {
+                        else if (type === "text" || type === "search" || type === "hidden") {
+                            if (key === "search") {
                                 $(this).val(value.replace("+"," "));
                             } else {
                                 $(this).val(value);
@@ -309,10 +309,10 @@
                     break;
                     case "select":
                         $(this).find("option").each(function(){
-                            if ($(this).val() == value) {
+                            if ($(this).val() === value) {
                                 $(this).prop("selected", true);
                             }
-                            else if (value == "" && $(this).val() == " ") {
+                            else if (value === "" && $(this).val() === " ") {
                                 $(this).prop("selected", true);
                             }
                         });
@@ -363,12 +363,12 @@
                 for (var key in paramObj) {
                     isParamObj = true;
                 }
-                if (dataApi == 0 && isParamObj) {
+                if (dataApi === 0 && isParamObj) {
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonAdvancedSearch (item, paramObj, paramKeyCount, "like");
                     });
                 }
-                if (dataApi == 0 || dataApi == 2) {
+                if (dataApi === 0 || dataApi === 2) {
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonKeywordsSearch (item, searchWords);
                     });
@@ -376,10 +376,10 @@
 
                 // Set totalResults
                 var totalResults = 0;
-                if (dataApi == 0 || dataApi == 2) {
+                if (dataApi === 0 || dataApi === 2) {
                     totalResults = cloneItems.length;
                 }
-                else if (dataApi == 1) {
+                else if (dataApi === 1) {
                     totalResults = json.totalResults;
                 }
 
@@ -392,7 +392,7 @@
                 var limitIdx = Number(limit) + Number(offset);
                 var currentPage = Math.ceil(offset / limit);
                 currentPage++;
-                var resultItems = (dataApi == 1) ? cloneItems : $.grep(cloneItems, function(item, i){
+                var resultItems = (dataApi === 1) ? cloneItems : $.grep(cloneItems, function(item, i){
                     if (i < offset) {
                         return false;
                     }
@@ -408,7 +408,7 @@
                 var paginate = {
                     page: pageList,
                     current: function(){
-                        if (this == currentPage) {
+                        if (this === currentPage) {
                             return ' class="fs-current"';
                         }
                         else {
@@ -461,34 +461,34 @@
 
         function jsonAdvancedSearch (obj, paramObj, paramKeyCount, matchType) {
             var matched = 0;
-            if (matchType == "like") {
+            if (matchType === "like") {
                 for (var key in paramObj) {
-                    if (typeof paramObj[key] == "string") {
+                    if (typeof paramObj[key] === "string") {
                         paramObj[key] = [ paramObj[key] ];
                     }
                     for (var i = -1, n = paramObj[key].length; ++i < n;) {
                         var reg = new RegExp(paramObj[key][i], "i");
-                        if (typeof obj[key] == "string" && reg.test(obj[key])) {
+                        if (typeof obj[key] === "string" && reg.test(obj[key])) {
                             matched++;
                             break;
                         }
-                        // else if (obj[key] && typeof obj[key] == "object" && obj[key].length) {
+                        // else if (obj[key] && typeof obj[key] === "object" && obj[key].length) {
                         //     for (var i = -1, n = obj[key].length; ++i < n;) {
                         //         if (reg.test(obj[key])) return true;
                         //     }
                         // }
                     }
                 }
-                return matched == paramKeyCount;
+                return matched === paramKeyCount;
             }
             else {
                 for (var key in paramObj) {
-                    if (obj[key] && typeof obj[key] == "string" && obj[key] != paramObj[key]) {
+                    if (obj[key] && typeof obj[key] === "string" && obj[key] != paramObj[key]) {
                         return false
                     }
-                    // else if (obj[key] && typeof obj[key] == "object" && obj[key].length) {
+                    // else if (obj[key] && typeof obj[key] === "object" && obj[key].length) {
                     //     for (var i = -1, n = obj[key].length; ++i < n;) {
-                    //         return paramObj[key] == obj[key][i];
+                    //         return paramObj[key] === obj[key][i];
                     //     }
                     // }
                 }
@@ -509,7 +509,7 @@
                     }
                 }
             }
-            return (keywordsCount == keywordsMutchCount) ? true : false;
+            return (keywordsCount === keywordsMutchCount) ? true : false;
         }
     };
     $.fn.flexibleSearch.defaults = {
