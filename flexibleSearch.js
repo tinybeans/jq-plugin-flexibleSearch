@@ -158,9 +158,11 @@
         // -------------------------------------------------
 
         // Search Form HTML
-        searchFormHTML = op.searchForm.html ? op.searchForm.html : Mustache.render(searchFormHTML.join(""), op.searchForm);
-        if (searchFormHTML) {
-            $this[0].innerHTML = searchFormHTML;
+        if (op.searchFormCreate === true) {
+            searchFormHTML = op.searchForm.html ? op.searchForm.html : Mustache.render(searchFormHTML.join(""), op.searchForm);
+            if (searchFormHTML) {
+                $this[0].innerHTML = searchFormHTML;
+            }
         }
 
         // Get query
@@ -523,6 +525,7 @@
         cache:  true, // I recommend "true".
 
         // Search Form
+        searchFormCreate: true,
         searchForm: {
             html: null,
             action: null,
