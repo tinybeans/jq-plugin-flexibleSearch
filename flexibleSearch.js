@@ -8,7 +8,7 @@
 * Version: 2.0.0 beta1
 * Comment: Please use this with Movable Type :)
 *
-* You must need to include "mustache.js" before "flexibleSearch.js".
+* You have to include "mustache.js" before "flexibleSearch.js".
 * Maybe... jQuery 1.7.x later
 *
 */
