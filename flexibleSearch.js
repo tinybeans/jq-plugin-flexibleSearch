@@ -144,7 +144,7 @@
         // * {{type}} (= op.searchFormInputType)
         // * {{placeholder}} (= op.searchFormInputPlaceholder)
         // * {{submitBtnText}} (= op.searchFormSubmitBtnText)
-        var searchForm = {
+        var searchFormObj = {
             action: op.searchFormAction,
             type: op.searchFormInputType,
             placeholder: op.searchFormInputPlaceholder,
@@ -231,7 +231,7 @@
 
         // Search Form HTML
         if (op.searchFormCreation == true) {
-            searchFormHTML = (op.searchFormHtml !== "") ? op.searchFormHtml : Mustache.render(searchFormHTML.join(""), searchForm);
+            searchFormHTML = (op.searchFormHtml !== "") ? op.searchFormHtml : Mustache.render(searchFormHTML.join(""), searchFormObj);
             if (searchFormHTML) {
                 $this[0].innerHTML = searchFormHTML;
             }
