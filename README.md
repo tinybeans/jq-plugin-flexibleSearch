@@ -6,6 +6,29 @@ flexibleSearch.js - jQuery plugin
 ## オプション
 
 ## advancedForm
+### 基本の検索フォームの書き出し  
+
+検索フォームをJavaScriptで書き出すことができます。HTMLに手を加えられない場合などに便利です。
+
+| オプション名 | 設定値 | 初期値 | 説明 |
+|:--|:--|:--|:--|
+| searchFormCreation | Boolean | true | 検索フォームをJavaScriptで書き出すかどうかを設定します。 |
+| searchFormHtml | HTML | (空文字) | 検索フォームのHTMLをまとめてHTML文字列で設定する場合に使用します。 |
+| searchFormAction | 文字列 | (空文字) | form要素のaction属性を指定します。 |
+| searchFormInputType | 文字列 | "search" | form要素のキーワード入力欄のtype属性を指定します。 |
+| searchFormInputPlaceholder | 文字列 | "Search words" | form要素のキーワード入力欄に入れるplaceholderを指定します。 |
+| searchFormSubmitBtnText | 文字列 | "Search" | form要素の検索実行ボタンのテキストを指定します。 |
+
+```
+// Default settings
+searchFormCreation: true,
+searchFormHtml: "",
+searchFormAction: "",
+searchFormInputType: "search",
+searchFormInputPlaceholder: "Search words",
+searchFormSubmitBtnText: "Search",
+```
+
 
 advancedForm オプションにオブジェクトを設定することでキーワード入力欄以外のフォーム要素を作成できます。このオプションでは以下の要素を書き出すことができます。
 
