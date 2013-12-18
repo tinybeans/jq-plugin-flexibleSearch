@@ -227,15 +227,21 @@
         // * {{paginateId}}
         // * {{&current}}
         // * {{.}}
-        var paginateHTML = [
-            '<div id="{{paginateId}}">',
-                '<ul>',
-                    '{{#page}}',
-                    '<li{{&current}}><span><a href="#" title="{{.}}">{{.}}</a></span></li>',
-                    '{{/page}}',
-                '</ul>',
-            '</div>'
-        ];
+        var paginateHTML = "";
+        if (op.paginateHTML !== null) {
+            paginateHTML = op.paginateHTML;
+        }
+        else {
+            paginateHTML = [
+                '<div id="{{id}}">',
+                    '<ul>',
+                        '{{#page}}',
+                        '<li{{&current}}><span><a href="#" title="{{.}}">{{.}}</a></span></li>',
+                        '{{/page}}',
+                    '</ul>',
+                '</div>'
+            ].join("");
+        }
         // Paginate </end>
 
         // -------------------------------------------------
@@ -493,7 +499,7 @@
                 for (var i = 0, n = Math.ceil(resultJSON.totalResults / limit); ++i <= n;) {
                     pageList.push(i);
                 }
-                var paginate = {
+                var paginateJSON = {
                     page: pageList,
                     current: function(){
                         if (this === currentPage) {
@@ -503,9 +509,9 @@
                             return "";
                         }
                     },
-                    paginateId: op.paginate.paginateId
+                    id: op.paginateId
                 };
-                paginateHTML = Mustache.render(paginateHTML.join(""), paginate);
+                paginateHTML = Mustache.render(paginateHTML, paginateJSON);
 
                 // Result message
                 var resultMsgJSON = {
@@ -530,7 +536,7 @@
                 document.getElementById(op.resultBlock.blockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
 
                 // Bind pageLink() to paginate link
-                $("#" + op.paginate.paginateId).on("click", "a", function(e){
+                $("#" + op.paginateId).on("click", "a", function(e){
                     e.preventDefault();
                     var page = $(this).attr("title");
                     var offset = (Number(page) - 1) * Number(limit);
@@ -626,10 +632,9 @@
         },
 
         // Paginate
-        paginate: {
-            count: 10,
-            paginateId : "fs-paginate"
-        },
+        paginateHTML: null,
+        paginateCount: 10,
+        paginateId : "fs-paginate",
 
         excludeParams: "" // This is an optional parameter. The comma separated parameter list to exclude from search.
     };
