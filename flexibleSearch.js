@@ -140,17 +140,22 @@
 
         // Search Form <start> - 検索フォーム全体
         //
-        // keys used in Search Form:
-        // * {{action}} (= op.searchForm.action)
-        // * {{searchPlaceholder}} (= op.searchForm.searchPlaceholder)
-        // * {{submitBtnText}} (= op.searchForm.submitBtnText)
-        // * {{&loadingImgPath}} (= op.searchForm.loadingImgPath)
+        // * {{action}} (= op.searchFormAction)
+        // * {{type}} (= op.searchFormInputType)
+        // * {{placeholder}} (= op.searchFormInputPlaceholder)
+        // * {{submitBtnText}} (= op.searchFormSubmitBtnText)
+        var searchForm = {
+            action: op.searchFormAction,
+            type: op.searchFormInputType,
+            placeholder: op.searchFormInputPlaceholder,
+            submitBtnText: op.searchFormSubmitBtnText
+        };
         var searchFormHTML = [
             '<form action="{{action}}" method="GET">',
                 '<input type="hidden" name="flexiblesearch" value="1">', // This element is required.
                 '<input type="hidden" name="offset" value="0">',
-                '<input type="hidden" name="limit" value="' + op.paginate.count + '">',
-                '<input type="search" name="search" placeholder="{{searchPlaceholder}}" class="fs-text fs-search">',
+                '<input type="hidden" name="limit" value="' + op.paginateCount + '">',
+                '<input type="{{type}}" name="search" placeholder="{{placeholder}}" class="fs-text fs-search">',
                 '<input type="submit" value="{{submitBtnText}}" class="fs-btn fs-submit">',
                 advancedFormHTML, // Advanced Form
             '</form>'
@@ -225,8 +230,8 @@
         // -------------------------------------------------
 
         // Search Form HTML
-        if (op.searchFormCreate === true) {
-            searchFormHTML = op.searchForm.html ? op.searchForm.html : Mustache.render(searchFormHTML.join(""), op.searchForm);
+        if (op.searchFormCreation == true) {
+            searchFormHTML = (op.searchFormHtml !== "") ? op.searchFormHtml : Mustache.render(searchFormHTML.join(""), searchForm);
             if (searchFormHTML) {
                 $this[0].innerHTML = searchFormHTML;
             }
@@ -592,13 +597,12 @@
         cache:  true, // I recommend "true".
 
         // Search Form
-        searchFormCreate: true,
-        searchForm: {
-            html: null,
-            action: null,
-            searchPlaceholder: "Search words",
-            submitBtnText:     "Search"
-        },
+        searchFormCreation: true,
+        searchFormHtml: "",
+        searchFormAction: "",
+        searchFormInputType: "search",
+        searchFormInputPlaceholder: "Search words",
+        searchFormSubmitBtnText: "Search",
 
         // Advanced Search Form
         advancedForm: null,
