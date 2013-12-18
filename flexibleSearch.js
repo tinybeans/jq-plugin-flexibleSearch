@@ -179,35 +179,46 @@
 
         // Search Result Message <start> - 検索結果メッセージ
         //
-        // keys used in Result Message:
         // * {{keywords}}
         // * {{count}}
         // * {{firstPage}}
         // * {{lastPage}}
         // * {{currentPage}}
-        var resultMsgHTML = [
-            '<div id="' + op.resultBlock.blockId + '-msg">',
-                '<p>',
-                    '{{#keywords}}「{{keywords}}」が {{/keywords}}{{count}} 件見つかりました。',
-                    '（{{firstPage}}〜{{lastPage}} ページ中 {{currentPage}} ページ目を表示）',
-                '</p>',
-            '</div>'
-        ];
+        var resultMsgHTML = "";
+        if (op.resultMsgHTML !== null) {
+            resultMsgHTML = op.resultMsgHTML;
+        }
+        else {
+            resultMsgHTML = [
+                '<div id="' + op.resultBlockId + '-msg">',
+                    '<p>',
+                        '{{#keywords}}「{{keywords}}」が {{/keywords}}{{count}} 件見つかりました。',
+                        '（{{firstPage}}〜{{lastPage}} ページ中 {{currentPage}} ページ目を表示）',
+                    '</p>',
+                '</div>'
+            ].join("");
+        }
         // Search Result Message </end>
 
         // Search Result Item <start> - 検索結果一覧
         //
         // keys used in Result Items:
         // * keys used in your JSON
-        var resultItemHTML = [
-            '<div id="' + op.resultBlock.blockId + '-items">',
-                '<ul>',
-                '{{#items}}',
-                    '<li>{{&title}}</li>',
-                '{{/items}}',
-                '</ul>',
-            '</div>'
-        ];
+        var resultItemHTML = "";
+        if (op.resultItemHTML !== null) {
+            resultItemHTML = op.resultItemHTML;
+        }
+        else {
+            resultItemHTML = [
+                '<div id="' + op.resultBlockId + '-items">',
+                    '<ul>',
+                    '{{#items}}',
+                        '<li>{{&title}}</li>',
+                    '{{/items}}',
+                    '</ul>',
+                '</div>'
+            ].join("");
+        }
         // Search Result Item </end>
 
         // Paginate <start> - 検索結果ページ分割
@@ -278,9 +289,8 @@
         }
 
         // Search Result Loading Image
-        if (op.resultBlock.loadingImgPath) {
-            resultLoadingHTML = Mustache.render(resultLoadingHTML.join(""), op.resultBlock);
-            document.getElementById(op.resultBlock.blockId).innerHTML = resultLoadingHTML;
+        if (resultLoadingHTML) {
+            document.getElementById(op.resultBlockId).innerHTML = resultLoadingHTML;
         }
 
         // Set jsonPath
@@ -509,12 +519,12 @@
                     },
                     currentPage: currentPage
                 };
-                resultMsgHTML = Mustache.render(resultMsgHTML.join(""), resultMsgJSON);
+                resultMsgHTML = Mustache.render(resultMsgHTML, resultMsgJSON);
                 // Result items
                 resultJSON.items = resultItems;
 
                 // Show result
-                resultItemHTML = Mustache.render(resultItemHTML.join(""), resultJSON);
+                resultItemHTML = Mustache.render(resultItemHTML, resultJSON);
 
                 // Search Result Block HTML
                 document.getElementById(op.resultBlock.blockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
