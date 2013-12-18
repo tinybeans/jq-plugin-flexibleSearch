@@ -168,15 +168,13 @@
 
         // Search Result Loading Image <start> - ローディング画像
         //
-        // keys used in Loading Image:
-        // * {{loadingImgPath}} (= op.resultBlock.loadingImgPath)
-        var resultLoadingHTML = [
-            '{{#loadingImgPath}}',
-            '<span class="fs-loading">',
-                '<img src="{{&loadingImgPath}}" alt="">',
-            '</span>',
-            '{{/loadingImgPath}}'
-        ];
+        var resultLoadingHTML = "";
+        if (op.loadingImgHtml !== null) {
+            resultLoadingHTML = op.loadingImgHtml;
+        }
+        else if (op.loadingImgPath) {
+            resultLoadingHTML = '<span class="fs-loading"><img src="' + op.loadingImgPath + '" alt=""></span>';
+        }
         // Search Result Message </end>
 
         // Search Result Message <start> - 検索結果メッセージ
