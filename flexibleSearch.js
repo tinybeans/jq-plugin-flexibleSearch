@@ -134,7 +134,7 @@
                     var advancedFormSelectTmpl = [
                         '<div class="fs-advanced-select">',
                         '{{#selects}}',
-                            '<select{{#id}} id="{{id}}"{{/id}}{{#name}} for="{{name}}"{{/name}}{{#size}} size="{{size}}"{{/size}}{{#multiple}} multiple{{/multiple}} class="fs-select{{#name}} fs-{{name}}{{/name}}">',
+                            '<select{{#id}} id="{{id}}"{{/id}}{{#name}} name="{{name}}"{{/name}}{{#size}} size="{{size}}"{{/size}}{{#multiple}} multiple{{/multiple}} class="fs-select{{#name}} fs-{{name}}{{/name}}">',
                                 '{{{options}}}',
                             '</select>',
                         '{{/selects}}',
