@@ -4,8 +4,8 @@
 * Copyright (c) Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
 *
 * Since  : 2010-11-12
-* Update : 2013-07-29
-* Version: 2.0.0 beta1
+* Update : 2013-12-20
+* Version: 2.0.0
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
