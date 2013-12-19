@@ -469,8 +469,8 @@
             cache: op.cache,
             dataType: "json",
             url: jsonPath,
-            error: function(){
-                // result block にエラーを表示;
+            error: function(jqXHR, textStatus, errorThrown){
+                op.ajaxError(jqXHR, textStatus, errorThrown);
             },
             success: function(json){
                 // Clone the items
@@ -671,5 +671,9 @@
         paginateId : "fs-paginate",
 
         excludeParams: "" // This is an optional parameter. The comma separated parameter list to exclude from search.
+        // Ajax
+        ajaxError: function(jqXHR, textStatus, errorThrown){
+            alert(textStatus);
+        },
     };
 })(jQuery);
