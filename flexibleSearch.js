@@ -281,7 +281,7 @@
                 case "string":
                     $.ajax({
                         type: "GET",
-                        cache: op.cache,
+                        cache: true,
                         dataType: "json",
                         url: op.searchDataPathPreload
                     });
@@ -291,7 +291,7 @@
                         for (var i = -1, n = op.searchDataPathPreload.length; ++i < n;) {
                             $.ajax({
                                 type: "GET",
-                                cache: op.cache,
+                                cache: true,
                                 dataType: "json",
                                 url: op.searchDataPathPreload[i]
                             });
@@ -301,7 +301,7 @@
                         for (var key in op.searchDataPathPreload) {
                             $.ajax({
                                 type: "GET",
-                                cache: op.cache,
+                                cache: true,
                                 dataType: "json",
                                 url: op.searchDataPathPreload[key]
                             });
