@@ -166,7 +166,6 @@
             else {
                 var searchFormTmpl = [
                     '<form action="{{action}}" method="GET">',
-                        '<input type="hidden" name="flexiblesearch" value="1">', // This element is required.
                         '<input type="hidden" name="offset" value="0">',
                         '<input type="hidden" name="limit" value="' + op.paginateCount + '">',
                         '<input type="{{type}}" name="search" placeholder="{{placeholder}}" class="fs-text fs-search">',
@@ -353,25 +352,39 @@
 
         // Set values to Search Form
         var searchWords = [];
+        var paramAry = paramStr.split(/&|%26/);
+        var paramExistArry = [];
         var paramObj = {};
         var offset = 0;
         var limit = 10;
-        var _paramAry = paramStr.split(/&|%26/);
+        var jsonPath = "";
+        var dataId = "";
+        var api = false;
+        var excludeParams = ["search", "dataId", "offset", "limit"];
+        if (op.excludeParams !== null) {
+            $.merge(excludeParams, op.excludeParams.toLowerCase().split(","));
+        }
 
-        for (var i = -1, n = _paramAry.length; ++i < n;) {
-            var key = _paramAry[i].split("=")[0];
-            var value = _paramAry[i].split("=")[1];
-            value = (value === "+") ? "" : value; // If value is " ", it is "+" on URL.
+        for (var i = -1, n = paramAry.length; ++i < n;) {
+            var param = paramAry[i].split("=");
+            var key = param[0];
+            var value = param[1] || "";
             // Set "paramObj" and "searchWords"
-            var keyLower = key.toLowerCase();
-            if (value !== "" && keyLower === "search") {
-                searchWords = value.split("+");
-            }
-            else if (keyLower === "offset" && value !== 0) {
-                offset = value;
-            }
-            else if (keyLower === "limit" && value !== 10) {
-                limit = value;
+            // var key = key.toLowerCase();
+            switch (key) {
+                case "search":
+                    value = (value === "+") ? "" : value; // If value is " ", it is "+" on URL.
+                    searchWords = value.split(/\+| |%20/);
+                    break;
+                case "offset":
+                    offset = value;
+                    break;
+                case "limit":
+                    limit = value;
+                    break;
+                case "dataId":
+                    dataId = value;
+                    break;
             }
 
             // Restore search condition
@@ -404,25 +417,21 @@
                             }
                         });
                     break;
-                } // switch
-            }); // each
-            if (value !== "") {
-                if ($.inArray(keyLower, excludeParams) !== -1) {
+                }
+            });
+
+            if (value !== "" ) {
+                if ($.inArray(key, excludeParams) !== -1) {
                     continue;
                 }
-                if (key.indexOf("[]") !== -1) {
-                    key = key.replace("[]", "");
-                    if (paramObj[key]) {
-                        paramObj[key].push(value);
-                    }
-                    else {
-                        paramObj[key] = [value];
-                    }
+                if ($.inArray(key, paramExistArry) !== -1) {
+                    paramObj[key] += "," + value;
                 }
                 else {
                     paramObj[key] = value;
                 }
             }
+            paramExistArry.push(key);
         } // for
 
         // Set paramKeyCount
@@ -514,30 +523,14 @@
                         }
                     });
                 }
-
-                // Result count
-                var resultJSON = {
-                    "totalResults": totalResults
-                };
-
                 // Paginate
-                var limitIdx = Number(limit) + Number(offset);
-                var currentPage = Math.ceil(offset / limit);
-                currentPage++;
-                var resultItems = (dataApi === 1) ? cloneItems : $.grep(cloneItems, function(item, i){
-                    if (i < offset) {
-                        return false;
-                    }
-                    if (i >= limitIdx) {
-                        return false;
-                    }
-                    return true;
-                });
+                var currentPage = Math.ceil(offset / limit) + 1;
                 var pageList = [];
                 for (var i = 0, n = Math.ceil(resultJSON.totalResults / limit); ++i <= n;) {
                     pageList.push(i);
                 }
                 var paginateJSON = {
+                    id: op.paginateId,
                     page: pageList,
                     current: function(){
                         if (this === currentPage) {
@@ -546,8 +539,7 @@
                         else {
                             return "";
                         }
-                    },
-                    id: op.paginateId
+                    }
                 };
                 var paginateHTML = Mustache.render(paginateTmpl, paginateJSON);
 
@@ -556,16 +548,14 @@
                     keywords: searchWords.join(", "),
                     count: resultJSON.totalResults,
                     firstPage: function(){
-                        return paginate.page[0];
+                        return paginateJSON.page[0];
                     },
                     lastPage: function(){
-                        return paginate.page[paginate.page.length-1];
+                        return paginateJSON.page[paginateJSON.page.length-1];
                     },
                     currentPage: currentPage
                 };
                 var resultMsgHTML = Mustache.render(resultMsgTmpl, resultMsgObj);
-                // Result items
-                resultJSON.items = resultItems;
 
                 // Show result
                 var resultItemHTML = Mustache.render(resultItemTmpl, resultJSON);
@@ -598,12 +588,10 @@
             var matched = 0;
             if (matchType === "like") {
                 for (var key in paramObj) {
-                    if (typeof paramObj[key] === "string") {
-                        paramObj[key] = [ paramObj[key] ];
-                    }
-                    for (var i = -1, n = paramObj[key].length; ++i < n;) {
-                        var reg = new RegExp(paramObj[key][i], "i");
-                        if (typeof obj[key] === "string" && reg.test(obj[key])) {
+                    var valueArray = paramObj[key].split(",");
+                    for (var i = -1, n = valueArray.length; ++i < n;) {
+                        var reg = new RegExp(valueArray[i], "i");
+                        if (typeof obj[key] === "undefined" || typeof obj[key] === "string" && reg.test(obj[key])) {
                             matched++;
                             break;
                         }
@@ -644,7 +632,7 @@
                     }
                 }
             }
-            return (keywordsCount === keywordsMutchCount) ? true : false;
+            return (keywordsCount === keywordsMutchCount);
         }
 
         //
@@ -682,14 +670,15 @@
         resultItemTmpl: null,
 
         // Paginate
+        paginateId: "fs-paginate",
         paginateTmpl: null,
         paginateCount: 10,
-        paginateId : "fs-paginate",
 
-        excludeParams: "" // This is an optional parameter. The comma separated parameter list to exclude from search.
         // Ajax
         ajaxError: function(jqXHR, textStatus, errorThrown){
             alert(textStatus);
         },
+        excludeParams: null, // This is an optional parameter. The comma separated parameter list to exclude from search.
+        dummy: false
     };
 })(jQuery);
