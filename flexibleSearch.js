@@ -245,18 +245,17 @@
         }
         // Search Result Item </end>
 
-        // Paginate <start> - 検索結果ページ分割
+        // Paginate <start>
         //
-        // keys used in Paginate:
         // * {{paginateId}}
         // * {{&current}}
         // * {{.}}
-        var paginateHTML = "";
-        if (op.paginateHTML !== null) {
-            paginateHTML = op.paginateHTML;
+        var paginateTmpl = "";
+        if (op.paginateTmpl !== null) {
+            paginateTmpl = op.paginateTmpl;
         }
         else {
-            paginateHTML = [
+            paginateTmpl = [
                 '<div id="{{id}}">',
                     '<ul>',
                         '{{#page}}',
@@ -535,7 +534,7 @@
                     },
                     id: op.paginateId
                 };
-                paginateHTML = Mustache.render(paginateHTML, paginateJSON);
+                var paginateHTML = Mustache.render(paginateTmpl, paginateJSON);
 
                 // Result message
                 var resultMsgObj = {
@@ -660,7 +659,7 @@
         resultItemTmpl: null,
 
         // Paginate
-        paginateHTML: null,
+        paginateTmpl: null,
         paginateCount: 10,
         paginateId : "fs-paginate",
 
