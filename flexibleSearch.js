@@ -225,16 +225,15 @@
         }
         // Search Result Message </end>
 
-        // Search Result Item <start> - 検索結果一覧
+        // Search Result Item <start>
         //
-        // keys used in Result Items:
         // * keys used in your JSON
-        var resultItemHTML = "";
-        if (op.resultItemHTML !== null) {
-            resultItemHTML = op.resultItemHTML;
+        var resultItemTmpl = "";
+        if (op.resultItemTmpl !== null) {
+            resultItemTmpl = op.resultItemTmpl;
         }
         else {
-            resultItemHTML = [
+            resultItemTmpl = [
                 '<div id="' + op.resultBlockId + '-items">',
                     '<ul>',
                     '{{#items}}',
@@ -555,7 +554,7 @@
                 resultJSON.items = resultItems;
 
                 // Show result
-                resultItemHTML = Mustache.render(resultItemHTML, resultJSON);
+                var resultItemHTML = Mustache.render(resultItemTmpl, resultJSON);
 
                 // Search Result Block HTML
                 document.getElementById(op.resultBlock.blockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
@@ -658,6 +657,7 @@
         loadingImgPath: "./loading.gif",
         loadingImgHTML: null,
         resultMsgTmpl: null,
+        resultItemTmpl: null,
 
         // Paginate
         paginateHTML: null,
