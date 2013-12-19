@@ -272,6 +272,23 @@
 
 
 
+        // Serialize parameters
+        $this.find("form").on("submit", function(){
+            var existParam = [];
+            var url = $(this).attr("action") || location.href.replace(/\?.*/, "");
+            var params = $(this).serializeArray();
+            for (var i = -1, n = params.length; ++i < n;) {
+                if (params[i].name === "search") {
+                    params[i].value = $.trim(params[i].value.replace("　", " "));
+                }
+            }
+            var serializeParams = $.param(params);
+            if (serializeParams) {
+                url = url + "?" + serializeParams;
+            }
+            location.href(url);
+            return false;
+        });
 
 
         // Get query
