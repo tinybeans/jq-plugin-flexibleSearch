@@ -17,14 +17,14 @@
     $.fn.flexibleSearch = function(options){
         var op = $.extend({}, $.fn.flexibleSearch.defaults, options);
 
-        // -------------------------------------------------
-        //  Initialization
-        // -------------------------------------------------
-        var $this = this;//, timestamp,
+        // -----------------------------------------------------------------------
+        //  Initialization <start>
+        //
 
         // -------------------------------------------------
         //  Template
         // -------------------------------------------------
+        var $this = this;
 
         // Advanced Form HTML <start> - 詳細検索
         var advancedFormTmpl = [];
@@ -43,6 +43,9 @@
                     '</div>'
                 ].join(""));
             }
+        //
+        //  Initialization </end>
+        // -----------------------------------------------------------------------
 
             // input:text
             if ("text" in op.advancedForm) {
