@@ -464,6 +464,9 @@
         // =======================================================================
         //  Search <start>
         //
+        if (api) {
+            jsonPath += "?" + paramStr;
+        }
         $.ajax({
             type: "GET",
             cache: op.cache,
@@ -472,35 +475,44 @@
             error: function(jqXHR, textStatus, errorThrown){
                 op.ajaxError(jqXHR, textStatus, errorThrown);
             },
-            success: function(json){
-                // Clone the items
-                var cloneItems = $.grep(json.items, function (){
-                    return true;
-                });
-
-                // Perform a search
-                var isParamObj = false;
-                for (var key in paramObj) {
-                    isParamObj = true;
+            success: function(response){
+                var totalResults = 0;
+                var resultJSON = {};
+                if (api) {
+                    // Data API
+                    resultJSON = response;
                 }
-                if (dataApi === 0 && isParamObj) {
+                else {
+                    // Original JSON
+                    // Clone the items
+                    var cloneItems = $.grep(response.items, function (){
+                        return true;
+                    });
+
+                    // Advanced Search
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonAdvancedSearch (item, paramObj, paramKeyCount, "like");
                     });
-                }
-                if (dataApi === 0 || dataApi === 2) {
+
+                    // Search by keywords
                     cloneItems = $.grep(cloneItems, function(item, i){
                         return jsonKeywordsSearch (item, searchWords);
                     });
-                }
 
-                // Set totalResults
-                var totalResults = 0;
-                if (dataApi === 0 || dataApi === 2) {
-                    totalResults = cloneItems.length;
-                }
-                else if (dataApi === 1) {
-                    totalResults = json.totalResults;
+                    // Set resultJSON
+                    var limitIdx = Number(limit) + Number(offset);
+                    resultJSON.totalResults = cloneItems.length;
+                    resultJSON.items = $.grep(cloneItems, function(item, i){
+                        if (i < offset) {
+                            return false;
+                        }
+                        else if (i >= limitIdx) {
+                            return false;
+                        }
+                        else {
+                            return true;
+                        }
+                    });
                 }
 
                 // Result count
@@ -643,6 +655,10 @@
         // Path
         searchDataPath: "/flexibleSearch/search_data.js",
         searchDataPathPreload: "/flexibleSearch/search_data.js",
+
+        // Data API
+        dataApiDataIds: null, // array
+        dataApiParams: null, // object
 
         // Performance
         cache:  true, // I recommend "true".
