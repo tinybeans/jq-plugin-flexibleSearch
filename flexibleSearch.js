@@ -267,17 +267,9 @@
         }
         // Paginate </end>
 
-        // -------------------------------------------------
-        //  Rendering
-        // -------------------------------------------------
 
-        // Search Form HTML
-        if (op.searchFormCreation == true) {
-            searchFormHTML = (op.searchFormHtml !== "") ? op.searchFormHtml : Mustache.render(searchFormHTML.join(""), searchFormObj);
-            if (searchFormHTML) {
-                $this[0].innerHTML = searchFormHTML;
-            }
-        }
+
+
 
         // Get query
         var paramStr = decodeURIComponent(location.search.replace(/^\?/, ""));
@@ -639,14 +631,14 @@
 
         // Search Form
         searchFormCreation: true,
-        searchFormHtml: "",
+        searchFormHTML: null,
         searchFormAction: "",
         searchFormInputType: "search",
         searchFormInputPlaceholder: "Search words",
         searchFormSubmitBtnText: "Search",
 
         // Advanced Search Form
-        advancedForm: null,
+        advancedFormObj: null,
 
         // Result Block
         loadingImgPath: "./loading.gif",
