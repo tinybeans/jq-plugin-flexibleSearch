@@ -21,164 +21,186 @@
         //  Initialization <start>
         //
 
-        // -------------------------------------------------
-        //  Template
-        // -------------------------------------------------
         var $this = this;
 
-        // Advanced Form HTML <start> - 詳細検索
-        var advancedFormTmpl = [];
-        var advancedFormHTML = "";
-        if (op.advancedForm !== null) {
-            // input:hidden
-            if ("hidden" in op.advancedForm) {
-                advancedFormTmpl.push([
-                    '<div class="fs-advanced-hidden" style="display:none;">',
-                    '{{#hidden}}',
-                        '<input type="hidden"',
-                            '{{#id}} id="{{id}}"{{/id}}',
-                            '{{#name}} name="{{name}}"{{/name}}',
-                            '{{#value}} value="{{value}}"{{/value}}>',
-                    '{{/hidden}}',
-                    '</div>'
-                ].join(""));
-            }
         //
         //  Initialization </end>
         // -----------------------------------------------------------------------
 
-            // input:text
-            if ("text" in op.advancedForm) {
-                advancedFormTmpl.push([
-                    '<div class="fs-advanced-text">',
-                    '{{#text}}',
-                        '{{#label}}',
-                        '<label{{#id}} id="{{id}}-label"{{/id}}{{#name}} for="{{name}}"{{/name}} class="fs-text{{#name}} fs-{{name}}{{/name}}">',
-                        '{{/label}}',
-                            '<input type="text"',
+        // -----------------------------------------------------------------------
+        //  Search Form HTML <start>
+        //
+
+        if (op.searchFormCreation) {
+
+            // Advanced Form HTML <start>
+            var advancedFormTmpl = [];
+            var advancedFormHTML = "";
+            if (op.advancedFormObj !== null) {
+                // input:hidden
+                if ("hidden" in op.advancedFormObj) {
+                    advancedFormTmpl.push([
+                        '<div class="fs-advanced-hidden" style="display:none;">',
+                        '{{#hidden}}',
+                            '<input type="hidden"',
                                 '{{#id}} id="{{id}}"{{/id}}',
                                 '{{#name}} name="{{name}}"{{/name}}',
-                                '{{#value}} value="{{value}}"{{/value}}',
-                                '{{#placeholder}} placeholder="{{placeholder}}"{{/placeholder}}>',
-                        '{{#label}}',
-                        '{{label}}</label>',
-                        '{{/label}}',
-                    '{{/text}}',
-                    '</div>'
-                ].join(""));
-            }
-
-            // input:checkbox
-            if ("checkbox" in op.advancedForm) {
-                advancedFormTmpl.push([
-                    '<div class="fs-advanced-checkbox">',
-                    '{{#checkbox}}',
-                        '{{#label}}',
-                        '<label{{#id}} id="{{id}}-label"{{/id}}{{#name}} for="{{name}}"{{/name}} class="fs-checkbox{{#name}} fs-{{name}}{{/name}}">',
-                        '{{/label}}',
-                            '<input type="checkbox"',
-                                '{{#id}} id="{{id}}"{{/id}}',
-                                '{{#name}} name="{{name}}"{{/name}}',
-                                '{{#value}} value="{{value}}"{{/value}}',
-                                '{{#checked}} checked="checked"{{/checked}}>',
-                        '{{#label}}',
-                        '{{label}}</label>',
-                        '{{/label}}',
-                    '{{/checkbox}}',
-                    '</div>'
-                ].join(""));
-            }
-
-            // input:radio
-            if ("radio" in op.advancedForm) {
-                advancedFormTmpl.push([
-                    '<div class="fs-advanced-radio">',
-                    '{{#radio}}',
-                        '{{#label}}',
-                        '<label{{#id}} id="{{id}}-label"{{/id}}{{#name}} for="{{name}}"{{/name}} class="fs-radio{{#name}} fs-{{name}}{{/name}}">',
-                        '{{/label}}',
-                            '<input type="radio"',
-                                '{{#id}} id="{{id}}"{{/id}}',
-                                '{{#name}} name="{{name}}"{{/name}}',
-                                '{{#value}} value="{{value}}"{{/value}}',
-                                '{{#checked}} checked="checked"{{/checked}}>',
-                        '{{#label}}',
-                        '{{label}}</label>',
-                        '{{/label}}',
-                    '{{/radio}}',
-                    '</div>'
-                ].join(""));
-            }
-
-            // input:select
-            var hasSelect = false;
-            if ("select" in op.advancedForm) {
-                hasSelect = true;
-                var advancedFormSelect = {
-                    "selects": op.advancedForm.select,
-                    "options": function(){
-                        var optionObj = this.option;
-                        var optionSet = [];
-                        for (var i = 0, l = optionObj.length; i < l; i++) {
-                            var slctd = optionObj[i].selected ? " selected": "";
-                            optionSet.push('<option value="' + optionObj[i].value + '"' + slctd + '>' + optionObj[i].label +'</option>');
-                        }
-                        return optionSet.join("");
-                    }
+                                '{{#value}} value="{{value}}"{{/value}}>',
+                        '{{/hidden}}',
+                        '</div>'
+                    ].join(""));
                 }
-                var advancedFormSelectTmpl = [
-                    '<div class="fs-advanced-select">',
-                    '{{#selects}}',
-                        '<select{{#id}} id="{{id}}"{{/id}}{{#name}} for="{{name}}"{{/name}}{{#size}} size="{{size}}"{{/size}}{{#multiple}} multiple{{/multiple}} class="fs-select{{#name}} fs-{{name}}{{/name}}">',
-                            '{{{options}}}',
-                        '</select>',
-                    '{{/selects}}',
-                    '</div>'
-                ].join("");
+
+                // input:text
+                if ("text" in op.advancedFormObj) {
+                    advancedFormTmpl.push([
+                        '<div class="fs-advanced-text">',
+                        '{{#text}}',
+                            '{{#label}}',
+                            '<label{{#id}} id="{{id}}-label"{{/id}}{{#name}} for="{{name}}"{{/name}} class="fs-text{{#name}} fs-{{name}}{{/name}}">',
+                            '{{/label}}',
+                                '<input type="text"',
+                                    '{{#id}} id="{{id}}"{{/id}}',
+                                    '{{#name}} name="{{name}}"{{/name}}',
+                                    '{{#value}} value="{{value}}"{{/value}}',
+                                    '{{#placeholder}} placeholder="{{placeholder}}"{{/placeholder}}>',
+                            '{{#label}}',
+                            '{{label}}</label>',
+                            '{{/label}}',
+                        '{{/text}}',
+                        '</div>'
+                    ].join(""));
+                }
+
+                // input:checkbox
+                if ("checkbox" in op.advancedFormObj) {
+                    advancedFormTmpl.push([
+                        '<div class="fs-advanced-checkbox">',
+                        '{{#checkbox}}',
+                            '{{#label}}',
+                            '<label{{#id}} id="{{id}}-label"{{/id}}{{#name}} for="{{name}}"{{/name}} class="fs-checkbox{{#name}} fs-{{name}}{{/name}}">',
+                            '{{/label}}',
+                                '<input type="checkbox"',
+                                    '{{#id}} id="{{id}}"{{/id}}',
+                                    '{{#name}} name="{{name}}"{{/name}}',
+                                    '{{#value}} value="{{value}}"{{/value}}',
+                                    '{{#checked}} checked="checked"{{/checked}}>',
+                            '{{#label}}',
+                            '{{label}}</label>',
+                            '{{/label}}',
+                        '{{/checkbox}}',
+                        '</div>'
+                    ].join(""));
+                }
+
+                // input:radio
+                if ("radio" in op.advancedFormObj) {
+                    advancedFormTmpl.push([
+                        '<div class="fs-advanced-radio">',
+                        '{{#radio}}',
+                            '{{#label}}',
+                            '<label{{#id}} id="{{id}}-label"{{/id}}{{#name}} for="{{name}}"{{/name}} class="fs-radio{{#name}} fs-{{name}}{{/name}}">',
+                            '{{/label}}',
+                                '<input type="radio"',
+                                    '{{#id}} id="{{id}}"{{/id}}',
+                                    '{{#name}} name="{{name}}"{{/name}}',
+                                    '{{#value}} value="{{value}}"{{/value}}',
+                                    '{{#checked}} checked="checked"{{/checked}}>',
+                            '{{#label}}',
+                            '{{label}}</label>',
+                            '{{/label}}',
+                        '{{/radio}}',
+                        '</div>'
+                    ].join(""));
+                }
+
+                // Make HTML of hidden, text, checkbox and radio
+                advancedFormHTML = Mustache.render(advancedFormTmpl.join(""), op.advancedFormObj);
+
+                // input:select
+                if ("select" in op.advancedFormObj) {
+                    var advancedFormSelectObj = {
+                        "selects": op.advancedFormObj.select,
+                        "options": function(){
+                            var optionObj = this.option;
+                            var optionSet = [];
+                            for (var i = 0, l = optionObj.length; i < l; i++) {
+                                var slctd = optionObj[i].selected ? " selected": "";
+                                optionSet.push('<option value="' + optionObj[i].value + '"' + slctd + '>' + optionObj[i].label +'</option>');
+                            }
+                            return optionSet.join("");
+                        }
+                    }
+                    var advancedFormSelectTmpl = [
+                        '<div class="fs-advanced-select">',
+                        '{{#selects}}',
+                            '<select{{#id}} id="{{id}}"{{/id}}{{#name}} for="{{name}}"{{/name}}{{#size}} size="{{size}}"{{/size}}{{#multiple}} multiple{{/multiple}} class="fs-select{{#name}} fs-{{name}}{{/name}}">',
+                                '{{{options}}}',
+                            '</select>',
+                        '{{/selects}}',
+                        '</div>'
+                    ].join("");
+
+                    // Make HTML of select
+                    advancedFormHTML += Mustache.render(advancedFormSelectTmpl, advancedFormSelectObj);
+                }
             }
+            // Advanced Form HTML </end>
 
-            advancedFormHTML = Mustache.render(advancedFormTmpl.join(""), op.advancedForm);
+            // Search Form <start>
+            //
+            // * {{action}} (= op.searchFormAction)
+            // * {{type}} (= op.searchFormInputType)
+            // * {{placeholder}} (= op.searchFormInputPlaceholder)
+            // * {{submitBtnText}} (= op.searchFormSubmitBtnText)
+            var searchFormObj = {
+                action: op.searchFormAction,
+                type: op.searchFormInputType,
+                placeholder: op.searchFormInputPlaceholder,
+                submitBtnText: op.searchFormSubmitBtnText
+            };
+            var searchFormHTML = "";
+            if (op.searchFormHTML !== null) {
+                searchFormHTML = op.searchFormHTML;
+            }
+            else {
+                var searchFormTmpl = [
+                    '<form action="{{action}}" method="GET">',
+                        '<input type="hidden" name="flexiblesearch" value="1">', // This element is required.
+                        '<input type="hidden" name="offset" value="0">',
+                        '<input type="hidden" name="limit" value="' + op.paginateCount + '">',
+                        '<input type="{{type}}" name="search" placeholder="{{placeholder}}" class="fs-text fs-search">',
+                        '<input type="submit" value="{{submitBtnText}}" class="fs-btn fs-submit">',
+                        advancedFormHTML, // Advanced Form
+                    '</form>'
+                ].join("");
+
+                // Make search form HTML
+                searchFormHTML = Mustache.render(searchFormTmpl, searchFormObj);
+            }
+            // Search Form </end>
+
+            // Insert into DOM
+            $this[0].innerHTML = searchFormHTML;
         }
 
-        if (hasSelect) {
-            advancedFormHTML += Mustache.render(advancedFormSelectTmpl, advancedFormSelect);
-        }
-        // Advanced Form HTML </end>
-
-        // Search Form <start> - 検索フォーム全体
         //
-        // * {{action}} (= op.searchFormAction)
-        // * {{type}} (= op.searchFormInputType)
-        // * {{placeholder}} (= op.searchFormInputPlaceholder)
-        // * {{submitBtnText}} (= op.searchFormSubmitBtnText)
-        var searchFormObj = {
-            action: op.searchFormAction,
-            type: op.searchFormInputType,
-            placeholder: op.searchFormInputPlaceholder,
-            submitBtnText: op.searchFormSubmitBtnText
-        };
-        var searchFormHTML = [
-            '<form action="{{action}}" method="GET">',
-                '<input type="hidden" name="flexiblesearch" value="1">', // This element is required.
-                '<input type="hidden" name="offset" value="0">',
-                '<input type="hidden" name="limit" value="' + op.paginateCount + '">',
-                '<input type="{{type}}" name="search" placeholder="{{placeholder}}" class="fs-text fs-search">',
-                '<input type="submit" value="{{submitBtnText}}" class="fs-btn fs-submit">',
-                advancedFormHTML, // Advanced Form
-            '</form>'
-        ];
-        // Search Form </end>
+        //  Search Form HTML </end>
+        // -----------------------------------------------------------------------
 
-        // Search Result Loading Image <start> - ローディング画像
+        // -----------------------------------------------------------------------
+        //  Result Block Template <start>
         //
+
+        // Search Result Loading Image <start>
         var resultLoadingHTML = "";
-        if (op.loadingImgHtml !== null) {
-            resultLoadingHTML = op.loadingImgHtml;
+        if (op.loadingImgHTML !== null) {
+            resultLoadingHTML = op.loadingImgHTML;
         }
         else if (op.loadingImgPath) {
             resultLoadingHTML = '<span class="fs-loading"><img src="' + op.loadingImgPath + '" alt=""></span>';
         }
-        // Search Result Message </end>
+        // Search Result Loading Image </end>
 
         // Search Result Message <start> - 検索結果メッセージ
         //
@@ -633,6 +655,8 @@
             blockId: "fs-result",
             loadingImgPath: ""
         },
+        loadingImgPath: "./loading.gif",
+        loadingImgHTML: null,
 
         // Paginate
         paginateHTML: null,
