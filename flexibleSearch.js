@@ -641,7 +641,7 @@
         advancedFormObj: null,
 
         // Result Block
-        loadingImgPath: "./loading.gif",
+        loadingImgPath: "/flexibleSearch/loading.gif",
         loadingImgHTML: null,
         resultBlockId: "fs-result",
         resultMsgTmpl: null,
