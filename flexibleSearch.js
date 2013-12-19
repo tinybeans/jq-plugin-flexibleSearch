@@ -202,19 +202,19 @@
         }
         // Search Result Loading Image </end>
 
-        // Search Result Message <start> - 検索結果メッセージ
+        // Search Result Message <start>
         //
         // * {{keywords}}
         // * {{count}}
         // * {{firstPage}}
         // * {{lastPage}}
         // * {{currentPage}}
-        var resultMsgHTML = "";
-        if (op.resultMsgHTML !== null) {
-            resultMsgHTML = op.resultMsgHTML;
+        var resultMsgTmpl = "";
+        if (op.resultMsgTmpl !== null) {
+            resultMsgTmpl = op.resultMsgTmpl;
         }
         else {
-            resultMsgHTML = [
+            resultMsgTmpl = [
                 '<div id="' + op.resultBlockId + '-msg">',
                     '<p>',
                         '{{#keywords}}「{{keywords}}」が {{/keywords}}{{count}} 件見つかりました。',
@@ -539,7 +539,7 @@
                 paginateHTML = Mustache.render(paginateHTML, paginateJSON);
 
                 // Result message
-                var resultMsgJSON = {
+                var resultMsgObj = {
                     keywords: searchWords.join(", "),
                     count: resultJSON.totalResults,
                     firstPage: function(){
@@ -550,7 +550,7 @@
                     },
                     currentPage: currentPage
                 };
-                resultMsgHTML = Mustache.render(resultMsgHTML, resultMsgJSON);
+                var resultMsgHTML = Mustache.render(resultMsgTmpl, resultMsgObj);
                 // Result items
                 resultJSON.items = resultItems;
 
@@ -657,6 +657,7 @@
         },
         loadingImgPath: "./loading.gif",
         loadingImgHTML: null,
+        resultMsgTmpl: null,
 
         // Paginate
         paginateHTML: null,
