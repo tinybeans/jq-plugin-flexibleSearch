@@ -17,7 +17,7 @@
     $.fn.flexibleSearch = function(options){
         var op = $.extend({}, $.fn.flexibleSearch.defaults, options);
 
-        // -----------------------------------------------------------------------
+        // =======================================================================
         //  Initialization <start>
         //
 
@@ -27,7 +27,7 @@
         //  Initialization </end>
         // -----------------------------------------------------------------------
 
-        // -----------------------------------------------------------------------
+        // =======================================================================
         //  Search Form HTML <start>
         //
 
@@ -188,7 +188,7 @@
         //  Search Form HTML </end>
         // -----------------------------------------------------------------------
 
-        // -----------------------------------------------------------------------
+        // =======================================================================
         //  Result Block Template <start>
         //
 
@@ -270,7 +270,13 @@
         }
         // Paginate </end>
 
+        //
+        //  Result Block Template </end>
+        // -----------------------------------------------------------------------
 
+        // =======================================================================
+        //  Get parameters and serialize parameters <start>
+        //
 
         // Serialize parameters
         $this.find("form").on("submit", function(){
@@ -290,10 +296,17 @@
             return false;
         });
 
-
-        // Get query
         var paramStr = decodeURIComponent(location.search.replace(/^\?/, ""));
-        if (! /flexibleSearch=1/i.test(paramStr)) {
+
+        //
+        //  Get parameters and serialize parameters </end>
+        // -----------------------------------------------------------------------
+
+        // =======================================================================
+        //  Preload search data files <start>
+        //
+
+        if (paramStr === "") {
             switch (typeof op.searchDataPathPreload) {
                 case "string":
                     $.ajax({
@@ -329,6 +342,10 @@
             return false;
         }
 
+        //
+        //  Preload search data files </end>
+        // -----------------------------------------------------------------------
+
         // Search Result Loading Image
         if (resultLoadingHTML) {
             document.getElementById(op.resultBlockId).innerHTML = resultLoadingHTML;
@@ -357,7 +374,7 @@
                 limit = value;
             }
 
-            // Reproduce search condition
+            // Restore search condition
             $this.find("[name='" + key + "']").each(function(){
                 var tagname = this.tagName.toLowerCase();
                 switch (tagname) {
@@ -413,9 +430,7 @@
         for (var key in paramObj) {
             paramKeyCount++;
         }
-        // -------------------------------------------------
-        //  Main
-        // -------------------------------------------------
+
         // =======================================================================
         //  Set JSON path and using Data API <start>
         //
@@ -445,6 +460,10 @@
         //
         //  Set JSON path and using Data API </end>
         // -----------------------------------------------------------------------
+
+        // =======================================================================
+        //  Search <start>
+        //
         $.ajax({
             type: "GET",
             cache: op.cache,
@@ -555,10 +574,13 @@
             } // success
         }); // ajax
 
+        //
+        //  Search </end>
+        // -----------------------------------------------------------------------
 
-        // -------------------------------------------------
-        //  Functions
-        // -------------------------------------------------
+        // =======================================================================
+        //  Functions <start>
+        //
 
         function jsonAdvancedSearch (obj, paramObj, paramKeyCount, matchType) {
             var matched = 0;
@@ -612,6 +634,10 @@
             }
             return (keywordsCount === keywordsMutchCount) ? true : false;
         }
+
+        //
+        //  Functions </end>
+        // -----------------------------------------------------------------------
     };
     $.fn.flexibleSearch.defaults = {
         // Path
