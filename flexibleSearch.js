@@ -556,7 +556,7 @@
                 var resultItemHTML = Mustache.render(resultItemTmpl, resultJSON);
 
                 // Search Result Block HTML
-                document.getElementById(op.resultBlock.blockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
+                document.getElementById(op.resultBlockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
 
                 // Bind pageLink() to paginate link
                 $("#" + op.paginateId).on("click", "a", function(e){
@@ -649,12 +649,9 @@
         advancedForm: null,
 
         // Result Block
-        resultBlock: {
-            blockId: "fs-result",
-            loadingImgPath: ""
-        },
         loadingImgPath: "./loading.gif",
         loadingImgHTML: null,
+        resultBlockId: "fs-result",
         resultMsgTmpl: null,
         resultItemTmpl: null,
 
