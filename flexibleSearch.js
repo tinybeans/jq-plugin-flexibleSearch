@@ -217,8 +217,11 @@
             resultMsgTmpl = [
                 '<div id="' + op.resultBlockId + '-msg">',
                     '<p>',
-                        '{{#keywords}}「{{keywords}}」が {{/keywords}}{{count}} 件見つかりました。',
-                        '（{{firstPage}}〜{{lastPage}} ページ中 {{currentPage}} ページ目を表示）',
+                        '{{#keywords}}「{{keywords}}」が {{/keywords}}',
+                        '{{#count}}{{count}} 件見つかりました。{{/count}}',
+                        '{{^count}}見つかりませんでした。{{/count}}',
+                        '{{#count}}（{{lastPage}} ページ中 {{currentPage}} ページ目を表示）{{/count}}',
+                        // '（{{firstPage}}〜{{lastPage}} ページ中 {{currentPage}} ページ目を表示）',
                     '</p>',
                 '</div>'
             ].join("");
