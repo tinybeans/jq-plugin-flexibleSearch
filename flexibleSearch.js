@@ -317,63 +317,6 @@
             document.getElementById(op.resultBlockId).innerHTML = resultLoadingHTML;
         }
 
-        // Set jsonPath
-        var jsonPath = "";
-        var dataId = "";
-        var dataApi = 0;
-        switch (typeof op.searchDataPath) {
-            case "string":
-                jsonPath = op.searchDataPath;
-                break;
-            case "object":
-                dataId = paramStr.match(/DataId=(\w+)/i);
-                if (dataId === null) {
-                    break;
-                }
-                else {
-                    jsonPath = op.searchDataPath[dataId[1]];
-                }
-                if (/^api_/.test(dataId[1]) || /^api1_/.test(dataId[1])) {
-                    dataApi = 1;
-                }
-                else if (/^api2_/.test(dataId[1])) {
-                    dataApi = 2;
-                }
-                break;
-        }
-
-        var dataApiParam = "";
-        if (/DataAPI=1/i.test(paramStr) || dataApi === 1) {
-            dataApi = 1;
-            dataApiParam = paramStr.replace(/([\?&])(search=[^+&]+)([^&]*)/, "$1$2");
-            jsonPath = (jsonPath.indexOf("?") === -1) ? jsonPath + "?" + dataApiParam
-                                                     : jsonPath + "&" + dataApiParam;
-        }
-        else if (/DataAPI=2/i.test(paramStr) || dataApi === 2) { // No limit
-            dataApi = 2;
-            dataApiParam = paramStr.replace(/([\?&])(search=[^+&]+)([^&]*)/, "$1$2");
-            dataApiParam = dataApiParam.replace(/([\?&])(limit=[^+&]+)/, "");
-            jsonPath = (jsonPath.indexOf("?") === -1) ? jsonPath + "?" + dataApiParam
-                                                     : jsonPath + "&" + dataApiParam;
-        }
-
-        // Bind an event handler to the submit event
-        $this.find("form").eq(0).on("submit", function(){
-            $(this).find("[name='offset']").val(0);
-            var $search = $(this).find("[name='search']");
-            $search.val($.trim($search.val().replace("　", " ")));
-            // var query = $(this).serialize();
-        });
-
-        // Set parameter list to exclude from search.
-        var excludeParams = ["search", "flexiblesearch", "dataid", "dataapi", "offset", "limit"];
-        if (op.excludeParams !== "") {
-            var opExcludeParams = op.excludeParams.toLowerCase().split(",");
-            for (var i = -1, n = opExcludeParams.length; ++i < n;) {
-                excludeParams.push($.trim(opExcludeParams));
-            }
-        }
-
         // Set values to Search Form
         var searchWords = [];
         var paramObj = {};
@@ -456,6 +399,35 @@
         // -------------------------------------------------
         //  Main
         // -------------------------------------------------
+        // =======================================================================
+        //  Set JSON path and using Data API <start>
+        //
+
+        // Set jsonPath
+        switch (typeof op.searchDataPath) {
+            case "string":
+                jsonPath = op.searchDataPath;
+            break;
+            case "object":
+                if (dataId === null) {
+                    alert("dataId is required.");
+                    break;
+                }
+                else {
+                    if (op.dataApiDataIds !== null && $.inArray(dataId, op.dataApiDataIds.split(",")) !== -1) {
+                        api = true;
+                        if (op.dataApiParams !== null) {
+                            paramStr += (paramStr !== "") ? "&" + $.param(op.dataApiParams): $.param(op.dataApiParams);
+                        }
+                    }
+                    jsonPath = op.searchDataPath[dataId];
+                }
+            break;
+        }
+
+        //
+        //  Set JSON path and using Data API </end>
+        // -----------------------------------------------------------------------
         $.ajax({
             type: "GET",
             cache: op.cache,
