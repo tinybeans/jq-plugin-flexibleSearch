@@ -13,19 +13,10 @@
 *
 */
 
-(function($){
-    $.fn.flexibleSearch = function(options){
+(function ($) {
+    $.fn.flexibleSearch = function (options) {
         var op = $.extend({}, $.fn.flexibleSearch.defaults, options);
-
-        // =======================================================================
-        //  Initialization <start>
-        //
-
         var $this = this;
-
-        //
-        //  Initialization </end>
-        // -----------------------------------------------------------------------
 
         // =======================================================================
         //  Search Form HTML <start>
@@ -121,7 +112,7 @@
                 if ("select" in op.advancedFormObj) {
                     var advancedFormSelectObj = {
                         "selects": op.advancedFormObj.select,
-                        "options": function(){
+                        "options": function () {
                             var optionObj = this.option;
                             var optionSet = [];
                             for (var i = 0, l = optionObj.length; i < l; i++) {
@@ -130,7 +121,7 @@
                             }
                             return optionSet.join("");
                         }
-                    }
+                    };
                     var advancedFormSelectTmpl = [
                         '<div class="fs-advanced-select">',
                         '{{#selects}}',
@@ -278,8 +269,8 @@
         //
 
         // Serialize parameters
-        $this.find("form").on("submit", function(){
-            var existParam = [];
+        $this.find("form").on("submit", function (e) {
+            e.preventDefault();
             var url = $(this).attr("action") || location.href.replace(/\?.*/, "");
             var params = $(this).serializeArray();
             for (var i = -1, n = params.length; ++i < n;) {
@@ -287,11 +278,12 @@
                     params[i].value = $.trim(params[i].value.replace("　", " "));
                 }
             }
+            params = op.submitAction(params);
             var serializeParams = $.param(params);
             if (serializeParams) {
                 url = url + "?" + serializeParams;
             }
-            location.href(url);
+            location.href = url;
             return false;
         });
 
@@ -354,7 +346,7 @@
         var searchWords = [];
         var paramAry = paramStr.split(/&|%26/);
         var paramExistArry = [];
-        var paramObj = {};
+        var advancedSearchObj = {};
         var offset = 0;
         var limit = 10;
         var jsonPath = "";
@@ -369,8 +361,7 @@
             var param = paramAry[i].split("=");
             var key = param[0];
             var value = param[1] || "";
-            // Set "paramObj" and "searchWords"
-            // var key = key.toLowerCase();
+            // Set "advancedSearchObj" and "searchWords"
             switch (key) {
                 case "search":
                     value = (value === "+") ? "" : value; // If value is " ", it is "+" on URL.
@@ -388,7 +379,10 @@
             }
 
             // Restore search condition
-            $this.find("[name='" + key + "']").each(function(){
+            if (key === "offset" || key === "limit") {
+                continue;
+            }
+            $this.find("[name='" + key + "']").each(function () {
                 var tagname = this.tagName.toLowerCase();
                 switch (tagname) {
                     case "input":
@@ -408,7 +402,7 @@
                         }
                     break;
                     case "select":
-                        $(this).find("option").each(function(){
+                        $(this).find("option").each(function () {
                             if ($(this).val() === value) {
                                 $(this).prop("selected", true);
                             }
@@ -420,15 +414,16 @@
                 }
             });
 
+            // Set advancedSearchObj. This object is used in original search.
             if (value !== "" ) {
                 if ($.inArray(key, excludeParams) !== -1) {
                     continue;
                 }
                 if ($.inArray(key, paramExistArry) !== -1) {
-                    paramObj[key] += "," + value;
+                    advancedSearchObj[key] += "," + value;
                 }
                 else {
-                    paramObj[key] = value;
+                    advancedSearchObj[key] = value;
                 }
             }
             paramExistArry.push(key);
@@ -436,7 +431,7 @@
 
         // Set paramKeyCount
         var paramKeyCount = 0;
-        for (var key in paramObj) {
+        for (var key in advancedSearchObj) {
             paramKeyCount++;
         }
 
@@ -450,9 +445,9 @@
                 jsonPath = op.searchDataPath;
             break;
             case "object":
-                if (dataId === null) {
-                    alert("dataId is required.");
-                    break;
+                if (dataId === "") {
+                    window.alert("dataId is required.");
+                    return;
                 }
                 else {
                     if (op.dataApiDataIds !== null && $.inArray(dataId, op.dataApiDataIds.split(",")) !== -1) {
@@ -481,11 +476,10 @@
             cache: op.cache,
             dataType: "json",
             url: jsonPath,
-            error: function(jqXHR, textStatus, errorThrown){
+            error: function (jqXHR, textStatus, errorThrown) {
                 op.ajaxError(jqXHR, textStatus, errorThrown);
             },
-            success: function(response){
-                var totalResults = 0;
+            success: function (response) {
                 var resultJSON = {};
                 if (api) {
                     // Data API
@@ -494,24 +488,23 @@
                 else {
                     // Original JSON
                     // Clone the items
-                    var cloneItems = $.grep(response.items, function (){
+                    var cloneItems = $.grep(response.items, function () {
                         return true;
                     });
-
                     // Advanced Search
-                    cloneItems = $.grep(cloneItems, function(item, i){
-                        return jsonAdvancedSearch (item, paramObj, paramKeyCount, "like");
+                    cloneItems = $.grep(cloneItems, function (item, i) {
+                        return jsonAdvancedSearch (item, advancedSearchObj, paramKeyCount, "like");
                     });
 
                     // Search by keywords
-                    cloneItems = $.grep(cloneItems, function(item, i){
+                    cloneItems = $.grep(cloneItems, function (item, i) {
                         return jsonKeywordsSearch (item, searchWords);
                     });
 
                     // Set resultJSON
                     var limitIdx = Number(limit) + Number(offset);
                     resultJSON.totalResults = cloneItems.length;
-                    resultJSON.items = $.grep(cloneItems, function(item, i){
+                    resultJSON.items = $.grep(cloneItems, function (item, i) {
                         if (i < offset) {
                             return false;
                         }
@@ -532,7 +525,7 @@
                 var paginateJSON = {
                     id: op.paginateId,
                     page: pageList,
-                    current: function(){
+                    current: function () {
                         if (this === currentPage) {
                             return ' class="fs-current"';
                         }
@@ -547,10 +540,10 @@
                 var resultMsgObj = {
                     keywords: searchWords.join(", "),
                     count: resultJSON.totalResults,
-                    firstPage: function(){
+                    firstPage: function () {
                         return paginateJSON.page[0];
                     },
-                    lastPage: function(){
+                    lastPage: function () {
                         return paginateJSON.page[paginateJSON.page.length-1];
                     },
                     currentPage: currentPage
@@ -564,7 +557,7 @@
                 document.getElementById(op.resultBlockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
 
                 // Bind pageLink() to paginate link
-                $("#" + op.paginateId).on("click", "a", function(e){
+                $("#" + op.paginateId).on("click", "a", function (e) {
                     e.preventDefault();
                     var page = $(this).attr("title");
                     var offset = (Number(page) - 1) * Number(limit);
@@ -584,11 +577,11 @@
         //  Functions <start>
         //
 
-        function jsonAdvancedSearch (obj, paramObj, paramKeyCount, matchType) {
+        function jsonAdvancedSearch (obj, advancedSearchObj, paramKeyCount, matchType) {
             var matched = 0;
             if (matchType === "like") {
-                for (var key in paramObj) {
-                    var valueArray = paramObj[key].split(",");
+                for (var key in advancedSearchObj) {
+                    var valueArray = advancedSearchObj[key].split(",");
                     for (var i = -1, n = valueArray.length; ++i < n;) {
                         var reg = new RegExp(valueArray[i], "i");
                         if (typeof obj[key] === "undefined" || typeof obj[key] === "string" && reg.test(obj[key])) {
@@ -605,13 +598,13 @@
                 return matched === paramKeyCount;
             }
             else {
-                for (var key in paramObj) {
-                    if (obj[key] && typeof obj[key] === "string" && obj[key] !== paramObj[key]) {
+                for (var key in advancedSearchObj) {
+                    if (obj[key] && typeof obj[key] === "string" && obj[key] !== advancedSearchObj[key]) {
                         return false;
                     }
                     // else if (obj[key] && typeof obj[key] === "object" && obj[key].length) {
                     //     for (var i = -1, n = obj[key].length; ++i < n;) {
-                    //         return paramObj[key] === obj[key][i];
+                    //         return advancedSearchObj[key] === obj[key][i];
                     //     }
                     // }
                 }
@@ -641,8 +634,8 @@
     };
     $.fn.flexibleSearch.defaults = {
         // Path
-        searchDataPath: "/flexibleSearch/search_data.js",
-        searchDataPathPreload: "/flexibleSearch/search_data.js",
+        searchDataPath: "/flexibleSearch/search.json", // Required!
+        searchDataPathPreload: "/flexibleSearch/search.json",
 
         // Data API
         dataApiDataIds: null, // array
@@ -654,7 +647,7 @@
         // Search Form
         searchFormCreation: true,
         searchFormHTML: null,
-        searchFormAction: "",
+        searchFormAction: "", // Required!
         searchFormInputType: "search",
         searchFormInputPlaceholder: "Search words",
         searchFormSubmitBtnText: "Search",
@@ -663,7 +656,7 @@
         advancedFormObj: null,
 
         // Result Block
-        loadingImgPath: "/flexibleSearch/loading.gif",
+        loadingImgPath: "/flexibleSearch/loading.gif", // Required!
         loadingImgHTML: null,
         resultBlockId: "fs-result",
         resultMsgTmpl: null,
@@ -674,10 +667,16 @@
         paginateTmpl: null,
         paginateCount: 10,
 
-        // Ajax
-        ajaxError: function(jqXHR, textStatus, errorThrown){
-            alert(textStatus);
+        // Submit
+        submitAction: function (paramArray) {
+            return paramArray;
         },
+
+        // Ajax
+        ajaxError: function (jqXHR, textStatus, errorThrown) {
+            window.alert(textStatus);
+        },
+
         excludeParams: null, // This is an optional parameter. The comma separated parameter list to exclude from search.
         dummy: false
     };
