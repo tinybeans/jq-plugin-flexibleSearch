@@ -1,18 +1,20 @@
-{"item":[
-<mt:entries lastn="0">
+<mt:Unless name="compress" regex_replace="/^\s*\n/gm","">{"items":[
+<mt:entries include_blogs="1" lastn="0">
 <mt:setvarBlock name="item{title}"><mt:entryTitle></mt:setvarBlock>
 <mt:setvarBlock name="item{url}"><mt:entryPermalink></mt:setvarBlock>
-<mt:setvarBlock name="item{tag}">,<mt:entryTags glue=","><mt:tagName regex_replace="/ |　/g","%20"></mt:entryTags>,</mt:setvarBlock>
 <mt:setvarBlock name="item{body}"><mt:entryBody remove_html="1" regex_replace="/\n|\t| |　/g",""></mt:setvarBlock>
 <mt:setvarBlock name="item{more}"><mt:entryMore remove_html="1" regex_replace="/\n|\t| |　/g",""></mt:setvarBlock>
+<mt:setvarBlock name="item{tag}">,<mt:entryTags glue=","><mt:tagName regex_replace="/ |　/g","%20"></mt:entryTags>,</mt:setvarBlock>
+<mt:setvarBlock name="item{category}"><mt:EntryCategories glue=","><mt:CategoryLabel></mt:EntryCategories></mt:setvarBlock>
 <mt:var name="item" to_json="1">,
 </mt:entries>
 <mt:pages lastn="0">
 <mt:setvarBlock name="item{title}"><mt:pageTitle></mt:setvarBlock>
 <mt:setvarBlock name="item{url}"><mt:pagePermalink></mt:setvarBlock>
-<mt:setvarBlock name="item{tag}">,<mt:pageTags glue=","><mt:tagName regex_replace="/ |　/g","%20"></mt:pageTags>,</mt:setvarBlock>
 <mt:setvarBlock name="item{body}"><mt:pageBody remove_html="1" regex_replace="/\n|\t| |　/g",""></mt:setvarBlock>
 <mt:setvarBlock name="item{more}"><mt:pageMore remove_html="1" regex_replace="/\n|\t| |　",""></mt:setvarBlock>
+<mt:setvarBlock name="item{tag}">,<mt:pageTags glue=","><mt:tagName regex_replace="/ |　/g","%20"></mt:pageTags>,</mt:setvarBlock>
+<mt:setvarBlock name="item{more}"><mt:PageFolder><mt:FolderLabel></mt:PageFolder></mt:setvarBlock>
 <mt:var name="item" to_json="1"><mt:unless __last__>,</mt:unless __last__>
 </mt:pages>
-]}
+]}</mt:Unless>
