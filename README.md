@@ -153,21 +153,21 @@ dummy: null は不要ですが、カンマを入れたり入れなかったり�
 | [dataApiParams](#dataApiParams) | Object | null | Data APIを利用する場合に、検索フォームとは別にエンドポイントに渡すパラメータを設定できます。 |
 | [cache](#cache) | Boolean |  true | JSONファイルをキャッシュするかどうかを指定します。 |
 | [searchFormCreation](#searchFormCreation) | Boolean | true | 検索フォームをJavaScriptで書き出すかどうかを設定します。ここでfalesを設定すれば、HTMLに書かれたスタティックなフォームを利用することができます。ただし、必須の項目があります。 |
-| [searchFormHTML](#searchFormHTML) | String | null |  |
-| [searchFormAction](#searchFormAction) | String | (空文字) |  |
-| [searchFormInputType](#searchFormInputType) | String | "search" |  |
-| [searchFormInputPlaceholder](#searchFormInputPlaceholder) | String | "Search words" |  |
-| [searchFormSubmitBtnText](#searchFormSubmitBtnText) | String | "Search" |  |
-| [advancedFormObj](#advancedFormObj) | String | null |  |
-| [loadingImgPath](#loadingImgPath) | String | "/flexibleSearch/loading.gif" |  |
-| [loadingImgHTML](#loadingImgHTML) | String | null |  |
-| [resultBlockId](#resultBlockId) | String | "fs-result" |  |
-| [resultMsgTmpl](#resultMsgTmpl) | String | null |  |
-| [resultItemTmpl](#resultItemTmpl) | String | null |  |
-| [paginateId](#paginateId) | String | "fs-paginate" |  |
-| [paginateTmpl](#paginateTmpl) | String | null |  |
-| [paginateCount](#paginateCount) | String | 10 |  |
-| [submitAction](#submitAction) | Function | function (paramArray) { return paramArray; } |  |
+| [searchFormHTML](#searchFormHTML) | String | null | JavaScriptで書き出す検索フォームをHTML文字列で設定する場合に使用します。 |
+| [searchFormAction](#searchFormAction) | String | (空文字) | form要素のaction属性を指定します。 |
+| [searchFormInputType](#searchFormInputType) | String | "search" | form要素のキーワード入力欄のtype属性を指定します。 |
+| [searchFormInputPlaceholder](#searchFormInputPlaceholder) | String | "Search words" | form要素のキーワード入力欄に入れるplaceholderを指定します。 |
+| [searchFormSubmitBtnText](#searchFormSubmitBtnText) | String | "Search" | form要素の検索実行ボタンのテキストを指定します。 |
+| [advancedFormObj](#advancedFormObj) | String | null | advancedFormObjオプションにオブジェクトを設定することでキーワード入力欄以外のフォーム要素を簡単に作成できます。 |
+| [loadingImgPath](#loadingImgPath) | String | "/flexibleSearch/loading.gif" | ローディング画像のパスを指定します。 |
+| [loadingImgHTML](#loadingImgHTML) | String | null | ローディング画像を直接HTMLで指定することができます。このオプションを指定した場合はloadingImgPathオプションの設定は無視されます。 |
+| [resultBlockId](#resultBlockId) | String | "fs-result" | 検索結果やローディング画像入れるブロック要素のIDを指定します。 |
+| [resultMsgTmpl](#resultMsgTmpl) | String | null | 検索結果のメッセージを表示するMustacheテンプレートです。 |
+| [resultItemTmpl](#resultItemTmpl) | String | null | 検索結果を表示するMustacheテンプレートです。  |
+| [paginateId](#paginateId) | String | "fs-paginate" | 検索結果のページ送りを表示するブロックのIDを指定します。 |
+| [paginateTmpl](#paginateTmpl) | String | null | 検索結果が複数ページにわたる場合のページ送りを表示するMustacheテンプレートです。 |
+| [paginateCount](#paginateCount) | String | 10 | 1ページに表示する件数をしていします。この値がlimitパラメータになります。 |
+| [submitAction](#submitAction) | Function | function (paramArray) { return paramArray; } | フォームがsubmitされ、ページが遷移する前に呼ばれる関数を設定できます。この関数にはシリアライズされたパラメータの配列paramArrayが渡されます。 |
 | [ajaxError](#ajaxError) | function (jqXHR, textStatus, errorThrown) { window.alert(textStatus); } |  |
 
 ### <a name="searchDataPath"></a>searchDataPath
@@ -256,50 +256,64 @@ cache: false,
 searchFormCreation: false,
 ```
 
-
 ### <a name="searchFormHTML"></a>searchFormHTML
+
+JavaScriptで書き出す検索フォームをHTML文字列で設定する場合に使用します。
+
+**設定例**
+
+```
+searchFormHTML: ['<form action="/search.html" method="GET">',
+  '<input type="hidden" name="offset" value="0">',
+  '<input type="hidden" name="limit" value="10">',
+  '<input type="text" name="search" value="">',
+  '<input type="radio" name="category" value="cat1">',
+  '<input type="radio" name="category" value="cat2">',
+  '<input type="submit" value="Search">',
+'</form>'].join(""),
+```
+
 ### <a name="searchFormAction"></a>searchFormAction
+
+form要素のaction属性を指定します。
+
+**設定例**
+
+```
+searchFormAction: "search.html",
+```
+
 ### <a name="searchFormInputType"></a>searchFormInputType
+
+form要素のキーワード入力欄のtype属性を指定します。
+
+**設定例**
+
+```
+searchFormInputType: "text",
+```
+
 ### <a name="searchFormInputPlaceholder"></a>searchFormInputPlaceholder
+
+form要素のキーワード入力欄に入れるplaceholderを指定します。
+
+**設定例**
+
+```
+searchFormInputPlaceholder: "キーワードを入力",
+```
+
 ### <a name="searchFormSubmitBtnText"></a>searchFormSubmitBtnText
+
+form要素の検索実行ボタンのテキストを指定します。
+
+**設定例**
+
+```
+searchFormSubmitBtnText: "検索",
+```
+
 ### <a name="advancedFormObj"></a>advancedFormObj
-### <a name="loadingImgPath"></a>loadingImgPath
-### <a name="loadingImgHTML"></a>loadingImgHTML
-### <a name="resultBlockId"></a>resultBlockId
-### <a name="resultMsgTmpl"></a>resultMsgTmpl
-### <a name="resultItemTmpl"></a>resultItemTmpl
-### <a name="paginateId"></a>paginateId
-### <a name="paginateTmpl"></a>paginateTmpl
-### <a name="paginateCount"></a>paginateCount
-### <a name="submitAction"></a>submitAction
-### <a name="ajaxError"></a>ajaxError
-
-### 検索用JSONのパスの設定
-
-
-
-| searchDataPath | 文字列、配列、オブジェクト | "/flexibleSearch/search_data.js" | 検索対象とするJSONファイルのパスを指定します。文字列、配列、オブジェクトを指定出来ます。 |
-| searchDataPathPreload | 文字列、配列、オブジェクト | "/flexibleSearch/search_data.js" |  |
-
-```
-// Default settings
-searchDataPath: "/flexibleSearch/search_data.js",
-searchDataPathPreload: "/flexibleSearch/search_data.js",
-```
-
-### キャッシュの設定
-
-| オプション名 | 設定値 | 初期値 | 説明 |
-|:--|:--|:--|:--|
-| cache | 真偽値 | true | 検索対象のJSONファイルのキャッシュを設定します。 |
-
-```
-// Default settings
-cache: true,
-```
-
-
-### 詳細検索フォームの書き出し
 
 advancedFormObjオプションにオブジェクトを設定することでキーワード入力欄以外のフォーム要素を作成できます。このオプションでは以下の要素を書き出すことができます。
 
@@ -324,17 +338,9 @@ advancedFormObj: {
 
 詳細は下記の個別項目を参照してください。なお、「HTML出力例」は実際には改行なしの1行になります。
 
-| オプション名 | 設定値 | 初期値 | 説明 |
-|:--|:--|:--|:--|
-| advancedFormObj | Object | null | キーワード入力欄以外のフォーム要素を作成できます。 |
-
-#### デフォルト
-
-```
-advancedFormObj: null
-```
-
 #### input:hidden要素
+
+**設定例**
 
 ```
 advancedFormObj: {
@@ -354,6 +360,8 @@ advancedFormObj: {
 ```
 
 #### input:text要素
+
+**設定例**
 
 ```
 advancedFormObj: {
@@ -379,6 +387,8 @@ advancedFormObj: {
 
 #### input:checkbox要素
 
+**設定例**
+
 ```
 advancedFormObj: {
     checkbox: [
@@ -401,6 +411,8 @@ advancedFormObj: {
 
 #### input:radio要素
 
+**設定例**
+
 ```
 advancedFormObj: {
     radio: [
@@ -422,6 +434,8 @@ advancedFormObj: {
 ```
 
 #### select要素
+
+**設定例**
 
 ```
 advancedFormObj: {
@@ -450,83 +464,108 @@ advancedFormObj: {
 </div>
 ```
 
-#### 設定方法サンプル
+**advancedFormObj全体の設定例**
 
 ```
-$('#search').flexibleSearch({
-    advancedFormObj: {
-        hidden: [
-            {id: "id値", name: "name値", value: "value値"}
-        ],
-        text: [
-            {id: "id値", name: "name値", value: "value値", placeholder: "placeholder値", label: "label値"},
-            {id: "id値", name: "name値", value: "value値", placeholder: "placeholder値", label: "label値"}
-        ],
-        checkbox: [
-            {id: "id値", name: "name値", value: "value値", label: "label値"},
-            {id: "id値", name: "name値", value: "value値", label: "label値"}
-        ],
-        radio: [
-            {id: "id値", name: "name値", value: "value値", label: "label値"},
-            {id: "id値", name: "name値", value: "value値", label: "label値"}
-        ],
-        select: [
-            {id: "id値", name: "name値", size: "", multiple: "", option: [
-                {label: "選択してください", value: ""},
-                {label: "opt_label1", value: "opt_value1"},
-                {label: "opt_label2", value: "opt_value2"},
-                {label: "opt_label3", value: "opt_value3"}
-            ]},
-            {id: "id値", name: "name値", size: "3", multiple: "multiple", option: [
-                {label: "opt_label1", value: "opt_value1"},
-                {label: "opt_label2", value: "opt_value2"},
-                {label: "opt_label3", value: "opt_value3"}
-            ]}
-        ]
-    }
-});
+advancedFormObj: {
+    hidden: [
+        {id: "id値", name: "name値1", value: "value値"}
+    ],
+    text: [
+        {id: "id値1", name: "name値2", value: "value値1", placeholder: "placeholder値1", label: "label値1"},
+        {id: "id値2", name: "name値3", value: "value値2", placeholder: "placeholder値2", label: "label値2"}
+    ],
+    checkbox: [
+        {id: "id値1", name: "name値4", value: "value値1", label: "label値1"},
+        {id: "id値2", name: "name値5", value: "value値2", label: "label値2"}
+    ],
+    radio: [
+        {id: "id値1", name: "name値6", value: "value値1", label: "label値1"},
+        {id: "id値2", name: "name値6", value: "value値2", label: "label値2"}
+    ],
+    select: [
+        {id: "id値1", name: "name値7", size: "", multiple: "", option: [
+            {label: "選択してください", value: ""},
+            {label: "opt_label1", value: "opt_value1"},
+            {label: "opt_label2", value: "opt_value2"},
+            {label: "opt_label3", value: "opt_value3"}
+        ]},
+        {id: "id値2", name: "name値8", size: "3", multiple: "multiple", option: [
+            {label: "opt_label1", value: "opt_value1"},
+            {label: "opt_label2", value: "opt_value2"},
+            {label: "opt_label3", value: "opt_value3"}
+        ]}
+    ]
+},
 ```
 
-### 検索結果表示ブロックとローディング画像
+### <a name="loadingImgPath"></a>loadingImgPath
 
-検索結果を表示するブロック要素のローディング画像に関する設定です。
+ローディング画像のパスを指定します。
 
-| オプション名 | 設定値 | 初期値 | 説明 |
-|:--|:--|:--|:--|
-| loadingImgPath | 文字列 | "./loading.gif" | ローディング画像のパスを指定します。（[詳細](#loadingImgPath)） |
-| loadingImgHTML | HTML| (空文字) | ローディング画像を直接HTMLで指定することができます。このオプションを指定した場合はloadingImgPathオプションの設定は無視されます。 |
-| resultBlockId | 文字列 | "fs-result" | 検索結果やローディング画像入れるブロック要素のIDを指定します。 |
-| resultMsgTmpl | Tmpl | null | 検索結果のメッセージを表示するMustacheテンプレートです。（[詳細](#resultMsgTmpl)） |
-| paginateTmpl | Tmpl | null | 検索結果のページ送りを表示するMustacheテンプレートです。（[詳細](#paginateTmpl)） |
-| paginateCount | 数値 | 10 | 検索結果のページ送りを表示するMustacheテンプレートです。 |
+**設定例**
 
-上記のオプションのうち、いくつかを詳細に説明します。
-
-#### <a name="loadingImgPath"></a>loadingImgPath
+```
+loadingImgPath: "/loading.gif",
+```
 
 loadingImgPathを指定すると、自動的に次のようなHTMLが検索結果表示ブロックの中に書き出されます。なお、検索結果表示ブロックの中身はappendやprependではなくinnerHTMLでまるごと書き換わります。
 
 ```
-<span class="fs-loading"><img src="./loading.gif" alt=""></span>
+<span class="fs-loading"></span>
 ```
 
-#### <a name="resultMsgHTML"></a>resultMsgTmpl
+### <a name="loadingImgHTML"></a>loadingImgHTML
+
+ローディング画像を直接HTMLで指定することができます。このオプションを指定した場合はloadingImgPathオプションの設定は無視されます。
+
+**設定例**
+
+```
+loadingImgHTML: "<img src=\"/loading.gif\" alt=\"読み込み中\">",
+```
+
+### <a name="resultBlockId"></a>resultBlockId
+
+検索結果やローディング画像入れるブロック要素のIDを指定します。
+
+**設定例**
+
+```
+resultBlockId: "contents-inner",
+```
+
+### <a name="resultMsgTmpl"></a>resultMsgTmpl
 
 検索結果の上部に表示するメッセージのMustacheテンプレートです。このオプションを指定しない場合は、次のテンプレートが使用されます。
 
 ```
 <div id="fs-result-msg">
-    <p>{{#keywords}}「{{keywords}}」が {{/keywords}}{{count}} 件見つかりました。（{{firstPage}}〜{{lastPage}} ページ中 {{currentPage}} ページ目を表示）</p>
+    <p>
+        {{#keywords}}「{{keywords}}」が {{/keywords}}
+        {{#count}}{{count}} 件見つかりました。{{/count}}
+        {{^count}}見つかりませんでした。{{/count}}
+        {{#count}}（{{lastPage}} ページ中 {{currentPage}} ページ目を表示）{{/count}}
+    </p>
 </div>
 ```
 
 {{項目名}}の部分は適宜該当する項目に置き換わりますので、resultMsgTmplオプションを指定する場合は、上記と同様に{{項目名}}の各項目を入れてください。
 
+**設定例**
+
+```
+resultMsgTmpl: ['<div id="fs-result-msg">',
+    '<p>{{#keywords}}「{{keywords}}」が {{/keywords}}{{count}} 件見つかりました。',
+    '（{{firstPage}}〜{{lastPage}} ページ中 {{currentPage}} ページ目を表示）</p>',
+'</div>'].join(""),
+```
+
 テンプレートの書き方は[janl/mustache.js](https://github.com/janl/mustache.js)を参照してください。
 
-#### <a name="resultItemHTML"></a>resultItemHTML
+### <a name="resultItemTmpl"></a>resultItemTmpl
 
-検索結果のHTMLです。このオプションを指定しない場合は、次のHTMLをテンプレートとして検索結果を書き出します。
+検索結果を表示するMustacheテンプレートです。このオプションを指定しない場合は、次のテンプレートが使用されます。
 
 ```
 <div id="fs-result-items">
@@ -542,7 +581,31 @@ loadingImgPathを指定すると、自動的に次のようなHTMLが検索結�
 
 テンプレートの書き方は[janl/mustache.js](https://github.com/janl/mustache.js)を参照してください。
 
-#### <a name="paginateTmpl"></a>paginateTmpl
+**設定例**
+
+```
+resultItemTmpl: [
+	'<div id="' + op.resultBlockId + '-items">',
+    	'<ul>',
+    	'{{#items}}',
+        	'<li><a href="{{permalink}}">{{&title}}</a></li>',
+	    '{{/items}}',
+    	'</ul>',
+	'</div>'
+].join("");,
+```
+
+### <a name="paginateId"></a>paginateId
+
+検索結果のページ送りを表示するブロックのIDを指定します。
+
+**設定例**
+
+```
+paginateId: "paginate",
+```
+
+### <a name="paginateTmpl"></a>paginateTmpl
 
 検索結果が複数ページにわたる場合のページ送りを表示するMustacheテンプレートです。このオプションを指定しない場合は、次のテンプレートが使用されます。
 
@@ -560,22 +623,63 @@ loadingImgPathを指定すると、自動的に次のようなHTMLが検索結�
 
 テンプレートの書き方は[janl/mustache.js](https://github.com/janl/mustache.js)を参照してください。
 
+**設定例**
 
+```
+paginateTmpl: [
+    '<div id="fs-paginate">',
+        '<ul>',
+            '{{#page}}',
+            '<li{{&current}}><a href="#" title="{{.}}">{{.}}</a></li>',
+            '{{/page}}',
+        '</ul>',
+    '</div>'
+].join(""),
+```
 
+### <a name="paginateCount"></a>paginateCount
 
+1ページに表示する件数をしていします。この値がlimitパラメータになります。
 
+**設定例**
 
+```
+paginateCount: 20,
+```
 
-searchDataPath: "/flexibleSearch/search_data.js",
-searchDataPathPreload: "/flexibleSearch/search_data.js",
+### <a name="submitAction"></a>submitAction
 
-// Performance
-cache:  true, // I recommend "true".
+フォームがsubmitされ、ページが遷移する前に呼ばれる関数を設定できます。この関数にはシリアライズされたパラメータの配列paramArrayが渡されます。
 
-// Paginate
-paginate: {
-    count: 10,
-    paginateId : "fs-paginate"
+**設定例**
+
+```
+submitAction: function (paramArray) {
+    var dataapi = false, l = paramArray.length;
+    for (var i = 0; i < l; i++) {
+        if (paramArray[i].name === "category" && paramArray[i].value === "movabletype") {
+            dataapi = true;
+        }
+    }
+    if (dataapi) {
+        for (var i = 0; i < l; i++) {
+            if (paramArray[i].name === "dataId") {
+                paramArray[i].value = "entries";
+            }
+        }
+    }
+    return paramArray;
 },
+```
 
-excludeParams: "" // This is an optional parameter. The comma separated parameter list to exclude from search.
+### <a name="ajaxError"></a>ajaxError
+
+jQuery.ajaxでエラーが起きたときに呼ばれる関数を設定できます。
+
+**設定例**
+
+```
+ajaxError: function (jqXHR, textStatus, errorThrown) {
+	window.alert(textStatus);
+},
+```
