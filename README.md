@@ -166,9 +166,9 @@ dummy: null は不要ですが、カンマを入れたり入れなかったり�
 | [resultItemTmpl](#resultItemTmpl) | String | null | 検索結果を表示するMustacheテンプレートです。  |
 | [paginateId](#paginateId) | String | "fs-paginate" | 検索結果のページ送りを表示するブロックのIDを指定します。 |
 | [paginateTmpl](#paginateTmpl) | String | null | 検索結果が複数ページにわたる場合のページ送りを表示するMustacheテンプレートです。 |
-| [paginateCount](#paginateCount) | String | 10 | 1ページに表示する件数をしていします。この値がlimitパラメータになります。 |
+| [paginateCount](#paginateCount) | Number | 10 | 1ページに表示する件数をしていします。この値がlimitパラメータになります。 |
 | [submitAction](#submitAction) | Function | function (paramArray) { return paramArray; } | フォームがsubmitされ、ページが遷移する前に呼ばれる関数を設定できます。この関数にはシリアライズされたパラメータの配列paramArrayが渡されます。 |
-| [ajaxError](#ajaxError) | function (jqXHR, textStatus, errorThrown) { window.alert(textStatus); } |  |
+| [ajaxError](#ajaxError) | Function | function (jqXHR, textStatus, errorThrown) { window.alert(textStatus); } | jQuery.ajaxでエラーが起きたときに呼ばれる関数を設定できます。 |
 
 ### <a name="searchDataPath"></a>searchDataPath
 
