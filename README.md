@@ -143,14 +143,143 @@ dummy: null は不要ですが、カンマを入れたり入れなかったり�
 
 ## オプション
 
-### 検索用JSONのパスの設定
-
-flexibleSearchで検索対象とするJSONファイルのパスを指定します。
+指定出来るオプションは以下の通りです。詳細は後述します。
 
 | オプション名 | 設定値 | 初期値 | 説明 |
 |:--|:--|:--|:--|
+| [searchDataPath](#searchDataPath) | String<br>Object | "/flexibleSearch/search.json"  | flexibleSearchで検索対象とするJSONファイルのパスを指定します。文字列で１つ指定する方法と、オブジェクトで複数指定する方法があります。 |
+| [searchDataPathPreload](#searchDataPathPreload) | String<br>Array<br>Object | "/flexibleSearch/search.json" | 検索実行ページ以外で、検索対象とするJSONファイルをあらかじめ読み込んでおきキャッシュすることができます。文字列で１つ指定する方法と、配列またはオブジェクトで複数指定する方法があります。 |
+| [dataApiDataIds](#dataApiDataIds) | String | null | MTのData APIを利用するDataIdを指定します。複数ある場合はカンマ区切りで指定します。DataIdとは、searchDataPathをオブジェクトで指定した場合のプロパティ名のことを指します。 |
+| [dataApiParams](#dataApiParams) | Object | null | Data APIを利用する場合に、検索フォームとは別にエンドポイントに渡すパラメータを設定できます。 |
+| [cache](#cache) | Boolean |  true | JSONファイルをキャッシュするかどうかを指定します。 |
+| [searchFormCreation](#searchFormCreation) | Boolean | true | 検索フォームをJavaScriptで書き出すかどうかを設定します。ここでfalesを設定すれば、HTMLに書かれたスタティックなフォームを利用することができます。ただし、必須の項目があります。 |
+| [searchFormHTML](#searchFormHTML) | String | null |  |
+| [searchFormAction](#searchFormAction) | String | (空文字) |  |
+| [searchFormInputType](#searchFormInputType) | String | "search" |  |
+| [searchFormInputPlaceholder](#searchFormInputPlaceholder) | String | "Search words" |  |
+| [searchFormSubmitBtnText](#searchFormSubmitBtnText) | String | "Search" |  |
+| [advancedFormObj](#advancedFormObj) | String | null |  |
+| [loadingImgPath](#loadingImgPath) | String | "/flexibleSearch/loading.gif" |  |
+| [loadingImgHTML](#loadingImgHTML) | String | null |  |
+| [resultBlockId](#resultBlockId) | String | "fs-result" |  |
+| [resultMsgTmpl](#resultMsgTmpl) | String | null |  |
+| [resultItemTmpl](#resultItemTmpl) | String | null |  |
+| [paginateId](#paginateId) | String | "fs-paginate" |  |
+| [paginateTmpl](#paginateTmpl) | String | null |  |
+| [paginateCount](#paginateCount) | String | 10 |  |
+| [submitAction](#submitAction) | Function | function (paramArray) { return paramArray; } |  |
+| [ajaxError](#ajaxError) | function (jqXHR, textStatus, errorThrown) { window.alert(textStatus); } |  |
+
+### <a name="searchDataPath"></a>searchDataPath
+
+flexibleSearchで検索対象とするJSONファイルのパスを指定します。文字列で１つ指定する方法と、オブジェクトで複数指定する方法があります。
+
+**設定例**
+
+```
+loadingImgPath: "/flexibleSearch/loading.gif",
+
+または
+
+searchDataPath: {
+    static: "/flexibleSearch/search_data.js",
+    entries: "/mt/mt-data-api.cgi/v1/sites/1/entries"
+},
+```
+
+### <a name="searchDataPathPreload"></a>searchDataPathPreload
+
+検索実行ページ以外で、検索対象とするJSONファイルをあらかじめ読み込んでおきキャッシュすることができます。文字列で１つ指定する方法と、配列またはオブジェクトで複数指定する方法があります。
+
+**設定例**
+
+```
+loadingImgPath: "/flexibleSearch/loading.gif",
+
+または
+
+searchDataPath: [
+    "/flexibleSearch/search_data.js",
+    "/mt/mt-data-api.cgi/v1/sites/1/entries"
+],
+
+または
+
+searchDataPath: {
+    static: "/flexibleSearch/search_data.js",
+    entries: "/mt/mt-data-api.cgi/v1/sites/1/entries"
+},
+```
+
+### <a name="dataApiDataIds"></a>dataApiDataIds
+
+MTのData APIを利用するDataIdを指定します。複数ある場合はカンマ区切りで指定します。DataIdとは、searchDataPathをオブジェクトで指定した場合のプロパティ名のことを指します。 
+
+**設定例**
+
+```
+dataApiDataIds: "entries,categories",
+```
+
+### <a name="dataApiParams"></a>dataApiParams
+
+Data APIを利用する場合に、検索フォームとは別にエンドポイントに渡すパラメータを設定できます。
+
+**設定例**
+
+```
+dataApiParams: {
+    fields: "title,keywords",
+    searchFields: "title,body,keywords"
+},
+```
+
+### <a name="cache"></a>cache
+
+**設定例**
+
+```
+cache: false,
+```
+
+### <a name="searchFormCreation"></a>searchFormCreation
+
+検索フォームをJavaScriptで書き出すかどうかを設定します。ここでfalesを設定すれば、HTMLに書かれたスタティックなフォームを利用することができます。ただし、以下のname値を持つ要素は必須です。
+
+* offset
+* limit
+* search
+
+**設定例**
+
+```
+searchFormCreation: false,
+```
+
+
+### <a name="searchFormHTML"></a>searchFormHTML
+### <a name="searchFormAction"></a>searchFormAction
+### <a name="searchFormInputType"></a>searchFormInputType
+### <a name="searchFormInputPlaceholder"></a>searchFormInputPlaceholder
+### <a name="searchFormSubmitBtnText"></a>searchFormSubmitBtnText
+### <a name="advancedFormObj"></a>advancedFormObj
+### <a name="loadingImgPath"></a>loadingImgPath
+### <a name="loadingImgHTML"></a>loadingImgHTML
+### <a name="resultBlockId"></a>resultBlockId
+### <a name="resultMsgTmpl"></a>resultMsgTmpl
+### <a name="resultItemTmpl"></a>resultItemTmpl
+### <a name="paginateId"></a>paginateId
+### <a name="paginateTmpl"></a>paginateTmpl
+### <a name="paginateCount"></a>paginateCount
+### <a name="submitAction"></a>submitAction
+### <a name="ajaxError"></a>ajaxError
+
+### 検索用JSONのパスの設定
+
+
+
 | searchDataPath | 文字列、配列、オブジェクト | "/flexibleSearch/search_data.js" | 検索対象とするJSONファイルのパスを指定します。文字列、配列、オブジェクトを指定出来ます。 |
-| searchDataPathPreload | 文字列、配列、オブジェクト | "/flexibleSearch/search_data.js" | 検索実行ページ以外で、検索対象とするJSONファイルをあらかじめ読み込んでおきキャッシュすることができます。設定方法はsearchDataPathと同じです。 |
+| searchDataPathPreload | 文字列、配列、オブジェクト | "/flexibleSearch/search_data.js" |  |
 
 ```
 // Default settings
@@ -169,28 +298,6 @@ searchDataPathPreload: "/flexibleSearch/search_data.js",
 cache: true,
 ```
 
-### 基本の検索フォームの書き出し  
-
-検索フォームをJavaScriptで書き出すことができます。HTMLに手を加えられない場合などに便利です。
-
-| オプション名 | 設定値 | 初期値 | 説明 |
-|:--|:--|:--|:--|
-| searchFormCreation | 真偽値 | true | 検索フォームをJavaScriptで書き出すかどうかを設定します。 |
-| searchFormHTML | HTML | null | 検索フォームのHTMLをまとめてHTML文字列で設定する場合に使用します。 |
-| searchFormAction | 文字列 | (空文字) | form要素のaction属性を指定します。 |
-| searchFormInputType | 文字列 | "search" | form要素のキーワード入力欄のtype属性を指定します。 |
-| searchFormInputPlaceholder | 文字列 | "Search words" | form要素のキーワード入力欄に入れるplaceholderを指定します。 |
-| searchFormSubmitBtnText | 文字列 | "Search" | form要素の検索実行ボタンのテキストを指定します。 |
-
-```
-// Default settings
-searchFormCreation: true,
-searchFormHTML: null,
-searchFormAction: "",
-searchFormInputType: "search",
-searchFormInputPlaceholder: "Search words",
-searchFormSubmitBtnText: "Search",
-```
 
 ### 詳細検索フォームの書き出し
 
