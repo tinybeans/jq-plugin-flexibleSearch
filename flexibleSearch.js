@@ -634,12 +634,12 @@
     };
     $.fn.flexibleSearch.defaults = {
         // Path
-        searchDataPath: "/flexibleSearch/search.json", // Required!
+        searchDataPath: "/flexibleSearch/search.json",
         searchDataPathPreload: "/flexibleSearch/search.json",
 
         // Data API
-        dataApiDataIds: null, // array
-        dataApiParams: null, // object
+        dataApiDataIds: null,
+        dataApiParams: null,
 
         // Performance
         cache:  true, // I recommend "true".
@@ -647,7 +647,7 @@
         // Search Form
         searchFormCreation: true,
         searchFormHTML: null,
-        searchFormAction: "", // Required!
+        searchFormAction: "",
         searchFormInputType: "search",
         searchFormInputPlaceholder: "Search words",
         searchFormSubmitBtnText: "Search",
@@ -656,7 +656,7 @@
         advancedFormObj: null,
 
         // Result Block
-        loadingImgPath: "/flexibleSearch/loading.gif", // Required!
+        loadingImgPath: "/flexibleSearch/loading.gif",
         loadingImgHTML: null,
         resultBlockId: "fs-result",
         resultMsgTmpl: null,
@@ -677,7 +677,7 @@
             window.alert(textStatus);
         },
 
-        excludeParams: null, // This is an optional parameter. The comma separated parameter list to exclude from search.
+        excludeParams: null,
         dummy: false
     };
 })(jQuery);
