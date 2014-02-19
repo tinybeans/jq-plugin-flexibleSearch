@@ -308,6 +308,9 @@
                     });
                     break;
                 case "object":
+                    if (op.searchDataPathPreload === null || op.searchDataPathPreload === "") {
+                        break;
+                    }
                     if (op.searchDataPathPreload.length) {
                         for (var i = -1, n = op.searchDataPathPreload.length; ++i < n;) {
                             $.ajax({
@@ -635,7 +638,7 @@
     $.fn.flexibleSearch.defaults = {
         // Path
         searchDataPath: "/flexibleSearch/search.json",
-        searchDataPathPreload: "/flexibleSearch/search.json",
+        searchDataPathPreload: null,
 
         // Data API
         dataApiDataIds: null,
