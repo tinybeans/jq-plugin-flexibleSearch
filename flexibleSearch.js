@@ -556,6 +556,17 @@
                 // Show result
                 var resultItemHTML = Mustache.render(resultItemTmpl, resultJSON);
 
+                // Callback
+                if (op.modifyResultMsgHTML !== null && typeof op.modifyResultMsgHTML === "function") {
+                    resultMsgHTML = op.modifyResultMsgHTML(resultMsgHTML);
+                }
+                if (op.modifyResultItemHTML !== null && typeof op.modifyResultItemHTML === "function") {
+                    resultItemHTML = op.modifyResultItemHTML(resultItemHTML);
+                }
+                if (op.modifyPaginateHTML !== null && typeof op.modifyPaginateHTML === "function") {
+                    paginateHTML = op.modifyPaginateHTML(paginateHTML);
+                }
+
                 // Search Result Block HTML
                 document.getElementById(op.resultBlockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
 
@@ -679,6 +690,11 @@
         ajaxError: function (jqXHR, textStatus, errorThrown) {
             window.alert(textStatus);
         },
+
+        // Callbacks : Modify HTML
+        modifyResultMsgHTML: null,
+        modifyResultItemHTML: null,
+        modifyPaginateHTML: null,
 
         excludeParams: null,
         dummy: false
