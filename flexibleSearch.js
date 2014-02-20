@@ -4,8 +4,8 @@
 * Copyright (c) Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
 *
 * Since  : 2010-11-12
-* Update : 2013-12-20
 * Version: 2.0.0
+* Update : 2014-02-21
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
@@ -570,6 +570,11 @@
                 // Search Result Block HTML
                 document.getElementById(op.resultBlockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
 
+                // Callback
+                if (op.resultComplete !== null && typeof op.resultComplete === "function") {
+                    op.resultComplete();
+                }
+
                 // Bind pageLink() to paginate link
                 $("#" + op.paginateId).on("click", "a", function (e) {
                     e.preventDefault();
@@ -695,6 +700,7 @@
         modifyResultMsgHTML: null,
         modifyResultItemHTML: null,
         modifyPaginateHTML: null,
+        resultComplete: null,
 
         excludeParams: null,
         dummy: false
