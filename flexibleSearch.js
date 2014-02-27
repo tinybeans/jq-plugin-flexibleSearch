@@ -252,7 +252,7 @@
                 '<div id="{{id}}">',
                     '<ul>',
                         '{{#page}}',
-                        '<li{{&current}}><span><a href="#" title="{{.}}">{{.}}</a></span></li>',
+                        '<li class="{{current}}"><span><a href="#" title="{{pageNumber}}">{{pageNumber}}</a></span></li>',
                         '{{/page}}',
                     '</ul>',
                 '</div>'
@@ -523,14 +523,14 @@
                 var currentPage = Math.ceil(offset / limit) + 1;
                 var pageList = [];
                 for (var i = 0, n = Math.ceil(resultJSON.totalResults / limit); ++i <= n;) {
-                    pageList.push(i);
+                    pageList.push({pageNumber: i});
                 }
                 var paginateJSON = {
                     id: op.paginateId,
                     page: pageList,
                     current: function () {
-                        if (this === currentPage) {
-                            return ' class="fs-current"';
+                        if (this.pageNumber === currentPage) {
+                            return 'fs-current';
                         }
                         else {
                             return "";

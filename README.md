@@ -613,13 +613,13 @@ paginateId: "paginate",
 <div id="fs-paginate">
     <ul>
         {{#page}}
-        <li{{&current}}><span><a href="#" title="{{.}}">{{.}}</a></span></li>
+        <li class="{{current}}"><span><a href="#" title="{{pageNumber}}">{{pageNumber}}</a></span></li>
         {{/page}}
     </ul>
 </div>
 ```
 
-{{#page}}〜{{/page}}で囲まれている内部がページ数分ループします。{{&current}}はカレントページの時に`` class="fs-current"``が出力されます。{{.}}がページ番号です。paginateHTMLオプションでHTMLを指定する場合は、上記HTMLと同様に{{項目名}}の各項目を入れてください。
+{{#page}}〜{{/page}}で囲まれている内部がページ数分ループします。{{current}}はカレントページの時に``fs-current``が出力されます。{{pageNumber}}がページ番号です。paginateHTMLオプションでHTMLを指定する場合は、上記HTMLと同様に{{項目名}}の各項目を入れてください。
 
 テンプレートの書き方は[janl/mustache.js](https://github.com/janl/mustache.js)を参照してください。
 
