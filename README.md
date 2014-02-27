@@ -85,7 +85,7 @@ mustache.jsはHTMLを簡単に書き出せるJavaScript用のテンプレート�
 ```
 {"items": [
 	{"title": "タイトル", "contents": "コンテンツ"},
-	{"title": "タイトル", "contents": "コンテンツ"}	
+	{"title": "タイトル", "contents": "コンテンツ"}
 ]}
 ```
 
@@ -213,7 +213,7 @@ searchDataPath: {
 
 ### <a name="dataApiDataIds"></a>dataApiDataIds
 
-MTのData APIを利用するDataIdを指定します。複数ある場合はカンマ区切りで指定します。DataIdとは、searchDataPathをオブジェクトで指定した場合のプロパティ名のことを指します。 
+MTのData APIを利用するDataIdを指定します。複数ある場合はカンマ区切りで指定します。DataIdとは、searchDataPathをオブジェクトで指定した場合のプロパティ名のことを指します。
 
 **設定例**
 
