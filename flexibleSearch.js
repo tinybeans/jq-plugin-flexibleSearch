@@ -496,7 +496,7 @@
                     });
                     // Advanced Search
                     cloneItems = $.grep(cloneItems, function (item, i) {
-                        return jsonAdvancedSearch (item, advancedSearchObj, paramKeyCount, "like");
+                        return jsonAdvancedSearch (item, advancedSearchObj, paramKeyCount, "like", op.advancedSearchCond);
                     });
 
                     // Search by keywords
@@ -596,22 +596,34 @@
         //  Functions <start>
         //
 
-        function jsonAdvancedSearch (obj, advancedSearchObj, paramKeyCount, matchType) {
+        function jsonAdvancedSearch (obj, advancedSearchObj, paramKeyCount, matchType, cond) {
             var matched = 0;
             if (matchType === "like") {
                 for (var key in advancedSearchObj) {
                     var valueArray = advancedSearchObj[key].split(",");
-                    for (var i = -1, n = valueArray.length; ++i < n;) {
+                    var valueArrayLength = valueArray.length;
+                    var _matched = 0;
+                    for (var i = -1, n = valueArrayLength; ++i < n;) {
                         var reg = new RegExp(valueArray[i], "i");
                         if (typeof obj[key] === "undefined" || typeof obj[key] === "string" && reg.test(obj[key])) {
-                            matched++;
-                            break;
+                            if (cond === 'AND' || cond === 'and') {
+                                _matched++;
+                            }
+                            else {
+                                matched++;
+                                break;
+                            }
                         }
                         // else if (obj[key] && typeof obj[key] === "object" && obj[key].length) {
                         //     for (var i = -1, n = obj[key].length; ++i < n;) {
                         //         if (reg.test(obj[key])) return true;
                         //     }
                         // }
+                    }
+                    if (cond === 'AND' || cond === 'and') {
+                        if (_matched === valueArrayLength) {
+                            matched++;
+                        }
                     }
                 }
                 return matched === paramKeyCount;
@@ -673,6 +685,7 @@
 
         // Advanced Search Form
         advancedFormObj: null,
+        advancedSearchCond: 'OR', // 'AND'
 
         // Result Block
         loadingImgPath: "/flexibleSearch/loading.gif",
