@@ -4,8 +4,8 @@
 * Copyright (c) Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
 *
 * Since  : 2010-11-12
-* Update : 2013-12-20
-* Version: 2.0.0
+* Update : 2014-02-27
+* Version: 2.1.0
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
@@ -252,7 +252,7 @@
                 '<div id="{{id}}">',
                     '<ul>',
                         '{{#page}}',
-                        '<li{{&current}}><span><a href="#" title="{{.}}">{{.}}</a></span></li>',
+                        '<li class="{{current}}"><span><a href="#" title="{{pageNumber}}">{{pageNumber}}</a></span></li>',
                         '{{/page}}',
                     '</ul>',
                 '</div>'
@@ -308,6 +308,9 @@
                     });
                     break;
                 case "object":
+                    if (op.searchDataPathPreload === null || op.searchDataPathPreload === "") {
+                        break;
+                    }
                     if (op.searchDataPathPreload.length) {
                         for (var i = -1, n = op.searchDataPathPreload.length; ++i < n;) {
                             $.ajax({
@@ -493,7 +496,7 @@
                     });
                     // Advanced Search
                     cloneItems = $.grep(cloneItems, function (item, i) {
-                        return jsonAdvancedSearch (item, advancedSearchObj, paramKeyCount, "like");
+                        return jsonAdvancedSearch (item, advancedSearchObj, paramKeyCount, "like", op.advancedSearchCond);
                     });
 
                     // Search by keywords
@@ -520,14 +523,14 @@
                 var currentPage = Math.ceil(offset / limit) + 1;
                 var pageList = [];
                 for (var i = 0, n = Math.ceil(resultJSON.totalResults / limit); ++i <= n;) {
-                    pageList.push(i);
+                    pageList.push({pageNumber: i});
                 }
                 var paginateJSON = {
                     id: op.paginateId,
                     page: pageList,
                     current: function () {
-                        if (this === currentPage) {
-                            return ' class="fs-current"';
+                        if (this.pageNumber === currentPage) {
+                            return 'fs-current';
                         }
                         else {
                             return "";
@@ -553,8 +556,24 @@
                 // Show result
                 var resultItemHTML = Mustache.render(resultItemTmpl, resultJSON);
 
+                // Callback
+                if (op.modifyResultMsgHTML !== null && typeof op.modifyResultMsgHTML === "function") {
+                    resultMsgHTML = op.modifyResultMsgHTML(resultMsgHTML);
+                }
+                if (op.modifyResultItemHTML !== null && typeof op.modifyResultItemHTML === "function") {
+                    resultItemHTML = op.modifyResultItemHTML(resultItemHTML);
+                }
+                if (op.modifyPaginateHTML !== null && typeof op.modifyPaginateHTML === "function") {
+                    paginateHTML = op.modifyPaginateHTML(paginateHTML);
+                }
+
                 // Search Result Block HTML
                 document.getElementById(op.resultBlockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
+
+                // Callback
+                if (op.resultComplete !== null && typeof op.resultComplete === "function") {
+                    op.resultComplete(resultJSON.totalResults);
+                }
 
                 // Bind pageLink() to paginate link
                 $("#" + op.paginateId).on("click", "a", function (e) {
@@ -577,22 +596,34 @@
         //  Functions <start>
         //
 
-        function jsonAdvancedSearch (obj, advancedSearchObj, paramKeyCount, matchType) {
+        function jsonAdvancedSearch (obj, advancedSearchObj, paramKeyCount, matchType, cond) {
             var matched = 0;
             if (matchType === "like") {
                 for (var key in advancedSearchObj) {
                     var valueArray = advancedSearchObj[key].split(",");
-                    for (var i = -1, n = valueArray.length; ++i < n;) {
+                    var valueArrayLength = valueArray.length;
+                    var _matched = 0;
+                    for (var i = -1, n = valueArrayLength; ++i < n;) {
                         var reg = new RegExp(valueArray[i], "i");
                         if (typeof obj[key] === "undefined" || typeof obj[key] === "string" && reg.test(obj[key])) {
-                            matched++;
-                            break;
+                            if (cond === 'AND' || cond === 'and') {
+                                _matched++;
+                            }
+                            else {
+                                matched++;
+                                break;
+                            }
                         }
                         // else if (obj[key] && typeof obj[key] === "object" && obj[key].length) {
                         //     for (var i = -1, n = obj[key].length; ++i < n;) {
                         //         if (reg.test(obj[key])) return true;
                         //     }
                         // }
+                    }
+                    if (cond === 'AND' || cond === 'and') {
+                        if (_matched === valueArrayLength) {
+                            matched++;
+                        }
                     }
                 }
                 return matched === paramKeyCount;
@@ -635,7 +666,7 @@
     $.fn.flexibleSearch.defaults = {
         // Path
         searchDataPath: "/flexibleSearch/search.json",
-        searchDataPathPreload: "/flexibleSearch/search.json",
+        searchDataPathPreload: null,
 
         // Data API
         dataApiDataIds: null,
@@ -654,6 +685,7 @@
 
         // Advanced Search Form
         advancedFormObj: null,
+        advancedSearchCond: 'OR', // 'AND'
 
         // Result Block
         loadingImgPath: "/flexibleSearch/loading.gif",
@@ -676,6 +708,12 @@
         ajaxError: function (jqXHR, textStatus, errorThrown) {
             window.alert(textStatus);
         },
+
+        // Callbacks : Modify HTML
+        modifyResultMsgHTML: null,
+        modifyResultItemHTML: null,
+        modifyPaginateHTML: null,
+        resultComplete: null,
 
         excludeParams: null,
         dummy: false
