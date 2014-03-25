@@ -572,7 +572,7 @@
 
                 // Callback
                 if (op.resultComplete !== null && typeof op.resultComplete === "function") {
-                    op.resultComplete();
+                    op.resultComplete(resultJSON.totalResults);
                 }
 
                 // Bind pageLink() to paginate link
