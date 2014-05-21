@@ -4,7 +4,7 @@
 * Copyright (c) Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
 *
 * Since  : 2010-11-12
-* Update : 2014-02-27
+* Update : 2014-05-21
 * Version: 2.1.0
 * Comment: Please use this with Movable Type :)
 *
@@ -544,10 +544,10 @@
                     keywords: searchWords.join(", "),
                     count: resultJSON.totalResults,
                     firstPage: function () {
-                        return paginateJSON.page[0];
+                        return paginateJSON.page[0].pageNumber;
                     },
                     lastPage: function () {
-                        return paginateJSON.page[paginateJSON.page.length-1];
+                        return paginateJSON.page.length;
                     },
                     currentPage: currentPage
                 };
