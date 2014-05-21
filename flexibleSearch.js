@@ -5,7 +5,7 @@
 *
 * Since  : 2010-11-12
 * Update : 2014-05-21
-* Version: 2.1.0
+* Version: 2.1.1
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
