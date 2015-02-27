@@ -187,6 +187,17 @@ searchDataPath: {
 },
 ```
 
+searchDataPathオプションをオブジェクトで指定した場合は、どのJSONを検索対象とするのかをdataIdパラメータで指定します。
+
+例えば、上記の例で言えば、下記のようなラジオボタンを設置して検索対象を切り替える方法があります。
+
+```
+<p>
+    <label><input type="radio" name="dataId" value="static">Search static</label>
+    <label><input type="radio" name="dataId" value="entries">Search entries</label>
+</p>
+```
+
 ### <a name="searchDataPathPreload"></a>searchDataPathPreload
 
 検索実行ページ以外で、検索対象とするJSONファイルをあらかじめ読み込んでおきキャッシュすることができます。文字列で１つ指定する方法と、配列またはオブジェクトで複数指定する方法があります。
