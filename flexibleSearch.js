@@ -393,6 +393,9 @@
                     break;
                 case "limit":
                     limit = value;
+                    if (op.limit !== null && typeof op.limit === 'number') {
+                        limit = op.limit;
+                    }
                     break;
                 case "dataId":
                     dataId = value;
@@ -800,6 +803,8 @@
         // -----------------------------------------------------------------------
     };
     $.fn.flexibleSearch.defaults = {
+        // The limit parameter is overwritten and locked as this value.
+        limit: null,
         // Path
         searchDataPath: "/flexibleSearch/search.json",
         searchDataPathPreload: null,
