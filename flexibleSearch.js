@@ -205,7 +205,7 @@
         }
         else {
             resultMsgTmpl = [
-                '<div id="' + op.resultBlockId + '-msg">',
+                '<div{{#id}} id="{{id}}"{{/id}}{{#classname}} class="{{classname}}"{{/classname}}>',
                     '<p>',
                         '{{#keywords}}「{{keywords}}」が {{/keywords}}',
                         '{{#count}}{{count}} 件見つかりました。{{/count}}',
@@ -249,11 +249,27 @@
         }
         else {
             paginateTmpl = [
-                '<div id="{{id}}">',
+                '<div{{#id}} id="{{id}}"{{/id}}{{#classname}} class="{{classname}}"{{/classname}}>',
                     '<ul>',
+
+                        '{{#showTurnPage}}',
+                        '{{#exceptFirst}}',
+                        '<li class="fs-prev"><span><a class="fs-prev-link fs-turn-page-link" href="#" title="{{prevPageText}}">{{prevPageText}}</a></span></li>',
+                        '{{/exceptFirst}}',
+                        '{{/showTurnPage}}',
+
                         '{{#page}}',
-                        '<li class="{{current}}"><span><a href="#" title="{{pageNumber}}">{{pageNumber}}</a></span></li>',
+                        '{{#checkRange}}',
+                        '<li class="{{current}}"{{#hidePageNumber}} style="display:none;"{{/hidePageNumber}}><span><a class="fs-page-link {{currentLink}}" href="#" title="{{pageNumber}}">{{pageNumber}}</a></span></li>',
+                        '{{/checkRange}}',
                         '{{/page}}',
+
+                        '{{#showTurnPage}}',
+                        '{{#exceptLast}}',
+                        '<li class="fs-next"><span><a class="fs-next-link fs-turn-page-link" href="#" title="{{nextPageText}}">{{nextPageText}}</a></span></li>',
+                        '{{/exceptLast}}',
+                        '{{/showTurnPage}}',
+
                     '</ul>',
                 '</div>'
             ].join("");
@@ -521,16 +537,84 @@
                 }
                 // Paginate
                 var currentPage = Math.ceil(offset / limit) + 1;
+                var realMaxPageCount = Math.ceil(resultJSON.totalResults / limit);
+                var maxPageCount = op.maxPageCount ? op.maxPageCount : 100;
+                var forwordRange = ((maxPageCount % 2) == 0) ? (maxPageCount / 2) - 1 : Math.floor(maxPageCount / 2);
+                var backwardRange = ((maxPageCount % 2) == 0) ? maxPageCount / 2 : Math.floor(maxPageCount / 2);
+                var startPage, lastPage;
+                if (realMaxPageCount <= maxPageCount) {
+                    startPage = 1;
+                    lastPage = realMaxPageCount;
+                }
+                else {
+                    startPage = currentPage - forwordRange;
+                    lastPage = currentPage + backwardRange;
+                    if (startPage < 1) {
+                        startPage = 1;
+                        lastPage = maxPageCount;
+                    }
+                    else {
+                      if (lastPage > realMaxPageCount) {
+                          backwardRange = realMaxPageCount - currentPage;
+                          lastPage = realMaxPageCount;
+                          forwordRange = maxPageCount - backwardRange;
+                          startPage = currentPage - forwordRange;
+                      }
+                    }
+                }
                 var pageList = [];
-                for (var i = 0, n = Math.ceil(resultJSON.totalResults / limit); ++i <= n;) {
+                for (var i = 0, n = realMaxPageCount; ++i <= n;) {
                     pageList.push({pageNumber: i});
                 }
                 var paginateJSON = {
                     id: op.paginateId,
+                    classname: op.paginateClassName,
                     page: pageList,
+                    hidePageNumber: op.hidePageNumber,
+                    showTurnPage: op.showTurnPage,
+                    prevPageText: op.prevPageText,
+                    nextPageText: op.nextPageText,
+                    isFirst: function(){
+                        return currentPage === 1;
+                    },
+                    isLast: function(){
+                        if (!pageList.length) {
+                            return true;
+                        }
+                        return currentPage === pageList.length;
+                    },
+                    exceptFirst: function(){
+                        return currentPage !== 1;
+                    },
+                    exceptLast: function(){
+                        return currentPage !== pageList.length;
+                    },
+                    checkRange: function(){
+                        return this.pageNumber >= startPage && this.pageNumber <= lastPage;
+                    },
                     current: function () {
                         if (this.pageNumber === currentPage) {
                             return 'fs-current';
+                        }
+                        else if (this.pageNumber === (currentPage - 1)) {
+                            return "fs-current-prev";
+                        }
+                        else if (this.pageNumber === (currentPage + 1)) {
+                            return "fs-current-next";
+                        }
+                        else {
+                            return "";
+                        }
+                    },
+                    currentLink: function () {
+                        if (this.pageNumber === currentPage) {
+                            return 'fs-current-link';
+                        }
+                        else if (this.pageNumber === (currentPage - 1)) {
+                            return "fs-current-prev-link";
+                        }
+                        else if (this.pageNumber === (currentPage + 1)) {
+                            return "fs-current-next-link";
                         }
                         else {
                             return "";
@@ -541,6 +625,8 @@
 
                 // Result message
                 var resultMsgObj = {
+                    id: op.resultMsgId ? op.resultMsgId : '',
+                    classname: op.resultMsgClassName ? op.resultMsgClassName : '',
                     keywords: searchWords.join(", "),
                     count: resultJSON.totalResults,
                     firstPage: function () {
@@ -568,7 +654,34 @@
                 }
 
                 // Search Result Block HTML
-                document.getElementById(op.resultBlockId).innerHTML = resultMsgHTML + resultItemHTML + paginateHTML;
+                var resultAllHTML = '';
+
+                // Add result message HTML
+                if (op.resultMsgInsertMethods === null) {
+                    resultAllHTML += resultMsgHTML;
+                }
+                // Add result items HTML
+                resultAllHTML += resultItemHTML;
+                // Add paginate HTML
+                if (op.paginateInsertMethods === null) {
+                    resultAllHTML += paginateHTML;
+                }
+
+                // Add all of result HTML to DOM
+                document.getElementById(op.resultBlockId).innerHTML = resultAllHTML;
+
+                // Add result message HTML to DOM
+                if (op.resultMsgInsertMethods !== null) {
+                    for (var i = 0, l = op.resultMsgInsertMethods.length; i < l; i++) {
+                        $(op.resultMsgInsertMethods[i].selector)[op.resultMsgInsertMethods[i].method](resultMsgHTML);
+                    }
+                }
+                // Add paginate HTML to DOM
+                if (op.paginateInsertMethods !== null) {
+                    for (var i = 0, l = op.paginateInsertMethods.length; i < l; i++) {
+                        $(op.paginateInsertMethods[i].selector)[op.paginateInsertMethods[i].method](paginateHTML);
+                    }
+                }
 
                 // Callback
                 if (op.resultComplete !== null && typeof op.resultComplete === "function") {
@@ -576,15 +689,26 @@
                 }
 
                 // Bind pageLink() to paginate link
-                $("#" + op.paginateId).on("click", "a", function (e) {
-                    e.preventDefault();
-                    var page = $(this).attr("title");
-                    var offset = (Number(page) - 1) * Number(limit);
-                    offset = "offset=" + offset;
-                    var url = location.href.split("?");
-                    var query = url[1].replace(/offset=[0-9]+/, offset);
-                    location.href = url[0] + "?" + query;
-                });
+                var paginateSelector = op.paginateId ? "#" + op.paginateId : "." + op.paginateClassName;
+                $(paginateSelector)
+                    .on("click", "a.fs-page-link", function (e) {
+                        e.preventDefault();
+                        var page = $(this).attr("title");
+                        var offset = (Number(page) - 1) * Number(limit);
+                        offset = "offset=" + offset;
+                        var url = location.href.split("?");
+                        var query = url[1].replace(/offset=[0-9]+/, offset);
+                        location.href = url[0] + "?" + query;
+                    })
+                    .on("click", "a.fs-turn-page-link", function (e) {
+                        e.preventDefault();
+                        if ($(this).hasClass('fs-prev-link')) {
+                            $(e.delegateTarget).find('.fs-current-prev-link').trigger('click');
+                        }
+                        else if ($(this).hasClass('fs-next-link')) {
+                            $(e.delegateTarget).find('.fs-current-next-link').trigger('click');
+                        }
+                    });
             } // success
         }); // ajax
 
@@ -690,14 +814,44 @@
         // Result Block
         loadingImgPath: "/flexibleSearch/loading.gif",
         loadingImgHTML: null,
+
         resultBlockId: "fs-result",
-        resultMsgTmpl: null,
         resultItemTmpl: null,
 
+        resultMsgId: null,
+        resultMsgClassName: "fs-result-msg",
+        resultMsgTmpl: null,
+        // You can set an array including plane object which has two properties,
+        // method property and selector property.
+        // e.g.
+        //     resultMsgInsertMethods: [
+        //         {
+        //             "selector": "foo",
+        //             "method": "append"
+        //         }
+        //     ],
+        resultMsgInsertMethods: null,
+
         // Paginate
-        paginateId: "fs-paginate",
+        paginateId: null,
+        paginateClassName: "fs-paginate",
         paginateTmpl: null,
         paginateCount: 10,
+        hidePageNumber: false,
+        showTurnPage: true,
+        prevPageText: 'Prev',
+        nextPageText: 'Next',
+        maxPageCount: 10,
+        // You can set an array including plane object which has two properties,
+        // method property and selector property.
+        // e.g.
+        //     paginateInsertMethods: [
+        //         {
+        //             "selector": "foo",
+        //             "method": "append"
+        //         }
+        //     ],
+        paginateInsertMethods: null,
 
         // Submit
         submitAction: function (paramArray) {
