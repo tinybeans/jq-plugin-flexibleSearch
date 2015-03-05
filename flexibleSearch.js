@@ -640,6 +640,9 @@
                 var resultMsgHTML = Mustache.render(resultMsgTmpl, resultMsgObj);
 
                 // Show result
+                if (op.modifyResultJSON !== null && typeof op.modifyResultJSON === "function") {
+                    resultJSON = op.modifyResultJSON(resultJSON);
+                }
                 var resultItemHTML = Mustache.render(resultItemTmpl, resultJSON);
 
                 // Callback
@@ -864,6 +867,15 @@
         },
 
         // Callbacks : Modify HTML
+        // You can modify the search result JSON.
+        // e.g.
+        //     modifyResultJSON = function(json){
+        //         json["fullName"] = function(){
+        //             return this.firstName + " " + this.lastName;
+        //         };
+        //         return json;
+        //     },
+        modifyResultJSON: null,
         modifyResultMsgHTML: null,
         modifyResultItemHTML: null,
         modifyPaginateHTML: null,
