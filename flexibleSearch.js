@@ -364,6 +364,7 @@
         // Set values to Search Form
         var searchWords = [];
         var paramAry = paramStr.split(/&|%26/);
+        var paramObj = {};
         var paramExistArry = [];
         var advancedSearchObj = {};
         var offset = 0;
@@ -380,6 +381,7 @@
             var param = paramAry[i].split("=");
             var key = param[0];
             var value = param[1] || "";
+            paramObj[key] = value;
             // Set "advancedSearchObj" and "searchWords"
             switch (key) {
                 case "search":
@@ -519,6 +521,13 @@
                     cloneItems = $.grep(cloneItems, function (item, i) {
                         return jsonKeywordsSearch (item, searchWords);
                     });
+
+                    // Do custom search
+                    if (op.customSearch !== null && typeof op.customSearch === "function") {
+                        cloneItems = $.grep(cloneItems, function (item, i) {
+                            return op.customSearch(item, paramObj);
+                        });
+                    }
 
                     // Set resultJSON
                     var limitIdx = Number(limit) + Number(offset);
@@ -866,7 +875,18 @@
             window.alert(textStatus);
         },
 
-        // Callbacks : Modify HTML
+        // Callbacks
+
+        // you can search in your logic.
+        // e.g.
+        //     customSearch: function(item, paramObj){
+        //         // item : Each item in items
+        //         // paramObj : Plane object of parameters
+        //         // The item is removed when return false
+        //         return true or false;
+        //     },
+        customSearch: null,
+
         // You can modify the search result JSON.
         // e.g.
         //     modifyResultJSON = function(json){
