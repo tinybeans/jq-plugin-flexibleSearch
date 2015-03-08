@@ -599,7 +599,7 @@
                         return currentPage !== 1;
                     },
                     exceptLast: function(){
-                        return currentPage !== pageList.length;
+                        return pageList.length > 0 && currentPage !== pageList.length;
                     },
                     checkRange: function(){
                         return this.pageNumber >= startPage && this.pageNumber <= lastPage;
