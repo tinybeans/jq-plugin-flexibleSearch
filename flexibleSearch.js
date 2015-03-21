@@ -662,7 +662,9 @@
                     id: op.resultMsgId ? op.resultMsgId : '',
                     classname: op.resultMsgClassName ? op.resultMsgClassName : '',
                     keywords: searchWords.join(", "),
+                    keywordArray: searchWords,
                     count: resultJSON.totalResults,
+                    metaTitle: document.title,
                     firstPage: function () {
                         return paginateJSON.page[0].pageNumber;
                     },
@@ -672,6 +674,17 @@
                     currentPage: currentPage
                 };
                 var resultMsgHTML = Mustache.render(resultMsgTmpl, resultMsgObj);
+
+                // Set the meta title
+                var resultMetaTitleTmpl = (op.resultMetaTitleTmpl) ? op.resultMetaTitleTmpl : [
+                    // '{{#keywords}}{{keywords}}{{/keywords}}',
+                    '{{#keywordArray}}{{.}} {{/keywordArray}}',
+                    '{{#count}} {{count}}件{{/count}}',
+                    '{{#count}} {{currentPage}}/{{lastPage}}{{/count}}',
+                    '{{#metaTitle}} | {{metaTitle}}{{/metaTitle}}'
+                ].join("");
+                var resultMetaTitleHTML = Mustache.render(resultMetaTitleTmpl, resultMsgObj);
+                document.title = resultMetaTitleHTML;
 
                 // Show result
                 if (op.modifyResultJSON !== null && typeof op.modifyResultJSON === "function") {
@@ -891,6 +904,9 @@
         resultMsgId: null,
         resultMsgClassName: "fs-result-msg",
         resultMsgTmpl: null,
+
+        resultMetaTitleTmpl: null,
+
         // You can set an array including plane object which has two properties,
         // method property and selector property.
         // e.g.
