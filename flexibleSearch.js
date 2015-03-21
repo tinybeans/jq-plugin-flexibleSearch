@@ -369,10 +369,13 @@
         var advancedSearchObj = {};
         var offset = 0;
         var limit = 10;
+        var sortBy = "";
+        var sortOrder = "";
+        var sortType = "";
         var jsonPath = "";
         var dataId = "";
         var api = false;
-        var excludeParams = ["search", "dataId", "offset", "limit"];
+        var excludeParams = ["search", "dataId", "offset", "limit", "sortBy", "sortOrder", "sortType"];
         if (op.excludeParams !== null) {
             $.merge(excludeParams, op.excludeParams.toLowerCase().split(","));
         }
@@ -399,6 +402,15 @@
                     break;
                 case "dataId":
                     dataId = value;
+                    break;
+                case "sortBy":
+                    sortBy = value.toLowerCase();
+                    break;
+                case "sortOrder":
+                    sortOrder = value.toLowerCase();
+                    break;
+                case "sortType":
+                    sortType = value.toLowerCase();
                     break;
             }
 
@@ -535,6 +547,16 @@
                     // Set resultJSON
                     var limitIdx = Number(limit) + Number(offset);
                     resultJSON.totalResults = cloneItems.length;
+                    // Sort
+                    if (sortBy !== "" && sortBy in cloneItems[0]) {
+                        if (sortOrder !== "ascend") {
+                            sortOrder = "descend";
+                        }
+                        if (sortType !== "numeric") {
+                            sortType = "string";
+                        }
+                        objectSort(cloneItems, sortBy, sortOrder, sortType);
+                    }
                     resultJSON.items = $.grep(cloneItems, function (item, i) {
                         if (i < offset) {
                             return false;
@@ -796,6 +818,37 @@
                 }
             }
             return (keywordsCount === keywordsMutchCount);
+        }
+
+        // Sort object.
+        // @paran {Array} array JSON
+        // @paran {String} sortBy Sort by this property's value.
+        // @paran {String} sortOrder ascend or descend.
+        // @paran {String} sortType numeric or string.
+        function objectSort (array, sortBy, sortOrder, sortType) {
+            if (!sortBy && typeof sortBy !== "string") {
+                return;
+            }
+            sortOrder = (sortOrder === 'ascend') ? -1 : 1;
+            array.sort(function(obj1, obj2){
+                var v1 = obj1[sortBy];
+                var v2 = obj2[sortBy];
+                if (sortType === 'numeric') {
+                    v1 = v1 - 0;
+                    v2 = v2 - 0;
+                }
+                else if (sortType === 'string') {
+                    v1 = '' + v1;
+                    v2 = '' + v2;
+                }
+                if (v1 < v2) {
+                    return 1 * sortOrder;
+                }
+                if (v1 > v2) {
+                    return -1 * sortOrder;
+                }
+                return 0;
+            });
         }
 
         //
