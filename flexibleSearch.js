@@ -151,6 +151,9 @@
                 submitBtnText: op.searchFormSubmitBtnText
             };
             var searchFormHTML = "";
+            if (op.limit !== null && typeof op.limit === 'number') {
+                op.paginateCount = op.limit;
+            }
             if (op.searchFormHTML !== null) {
                 searchFormHTML = op.searchFormHTML;
             }
