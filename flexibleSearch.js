@@ -1,11 +1,11 @@
 /*
 * flexibleSearch.js
 *
-* Copyright (c) Tomohiro Okuwaki (http://www.tinybeans.net/blog/)
+* Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2014-05-21
-* Version: 2.1.1
+* Update : 2015-03-24
+* Version: 2.2.0
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
@@ -151,6 +151,9 @@
                 submitBtnText: op.searchFormSubmitBtnText
             };
             var searchFormHTML = "";
+            if (op.limit !== null && typeof op.limit === 'number') {
+                op.paginateCount = op.limit;
+            }
             if (op.searchFormHTML !== null) {
                 searchFormHTML = op.searchFormHTML;
             }
