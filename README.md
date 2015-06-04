@@ -3,6 +3,7 @@ flexibleSearch.js - jQuery plugin
 
 あらかじめ用意したJSONファイルを検索することにより超高速JavaScript検索を実現するjQueryプラグインです。
 **JSONファイルさえ用意できればどのようなサイトにでも導入することができます。**
+
 CMSの種類、静的なHTMLサイト、動的なPHPサイト、スマホサイトなど、様々なシーンでご利用ください。
 
 なお、Movable Type 6 で使う場合は、Data API にパラメータを渡して検索することもできます。検索は Data API で行い、ページングは flexibleSearch.js の機能を使うという方法が可能になります。
@@ -152,7 +153,25 @@ flexibleSearch-config.jsに書く内容は以下のとおりです。flexibleSea
 
 dummy: null は不要ですが、最後のカンマを入れたり入れなかったり変更するのが面倒な場合は最終行に入れておくと良いかもしれません :-)
 
-以下で、設定できるオプションを解説します。
+設定できるオプションは後述します。
+
+## <a name="sort"></a>検索結果のソート <span style="font-size: 0.7em;">(version added: 2.2.0)</span>
+
+検索結果の並び順は、デフォルトの状態だとJSONの並び順に準拠します。
+
+この並び順を``sortBy``、``sortOrder``、``sortType``の3つのURLパラメータを使って並べ替えることができます。この機能はv2.2.0で追加されました。
+
+### sortBy
+
+並び替えの基準となるキーを指定します。並べ替える場合は必須です。
+
+### sortOrder
+
+並び順を``ascend``（昇順）または``descend``（降順）で指定します。初期値は``descend``です。
+
+### sortType
+
+数値として並び変える場合は``numeric``を、文字列として並び変える場合は``string``を指定します。初期値は``string``です。
 
 ## オプション
 
