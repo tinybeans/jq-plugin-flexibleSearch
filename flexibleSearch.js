@@ -551,7 +551,7 @@
                     var limitIdx = Number(limit) + Number(offset);
                     resultJSON.totalResults = cloneItems.length;
                     // Sort
-                    if (sortBy !== "" && sortBy in cloneItems[0]) {
+                    if (resultJSON.totalResults !== 0 && sortBy !== "" && sortBy in cloneItems[0]) {
                         if (sortOrder !== "ascend") {
                             sortOrder = "descend";
                         }
