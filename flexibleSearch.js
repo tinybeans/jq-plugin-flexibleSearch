@@ -455,6 +455,7 @@
 
             // Set advancedSearchObj. This object is used in original search.
             if (value !== "" ) {
+                value = value.replace(/\+/g, " ");
                 if ($.inArray(key, excludeParams) !== -1) {
                     continue;
                 }
