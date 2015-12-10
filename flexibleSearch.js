@@ -781,7 +781,7 @@
                     var valueArrayLength = valueArray.length;
                     var _matched = 0;
                     for (var i = -1, n = valueArrayLength; ++i < n;) {
-                        var reg = new RegExp(valueArray[i], "i");
+                        var reg = new RegExp(valueArray[i].replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1"), "i");
                         if (typeof obj[key] === "undefined" || typeof obj[key] === "string" && reg.test(obj[key])) {
                             if (cond === 'AND' || cond === 'and') {
                                 _matched++;
@@ -824,7 +824,7 @@
             var keywordsCount = keywordsArray.length;
             var keywordsMutchCount = 0;
             for (var i = -1; ++i < keywordsCount;) {
-                var reg = new RegExp(keywordsArray[i], "i");
+                var reg = new RegExp(keywordsArray[i].replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1"), "i");
                 // if (reg.test(obj[key])) keyMatch++;
                 for (var key in obj) {
                     if (reg.test(obj[key])) {
