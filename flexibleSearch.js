@@ -4,8 +4,8 @@
 * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2015-06-29
-* Version: 2.2.1
+* Update : 2015-12-11
+* Version: 2.2.2
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
