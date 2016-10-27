@@ -798,7 +798,7 @@ paginateClassName: "fs-paginate",
 
         {{#page}}
         {{#checkRange}}
-        <li class="{{current}}"{{#hidePageNumber}} style="display:none;"{{/hidePageNumber}}><span><a class="fs-page-link {{currentLink}}" href="#" itle="{{pageNumber}}">{{pageNumber}}</a></span></li>
+        <li class="{{current}}"{{#hidePageNumber}} style="display:none;"{{/hidePageNumber}}><span><a class="fs-page-link {{currentLink}}" href="#" title="{{pageNumber}}">{{pageNumber}}</a></span></li>
         {{/checkRange}}
         {{/page}}
 
