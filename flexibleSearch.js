@@ -752,6 +752,10 @@
                         offset = "offset=" + offset;
                         var url = location.href.split("?");
                         var query = url[1].replace(/offset=[0-9]+/, offset);
+                        if(query.indexOf('offset=') < 0){
+                            query += '&' + offset;
+                        }
+                        query = query.replace(/&offset=0/, '');
                         location.href = url[0] + "?" + query;
                     })
                     .on("click", "a.fs-turn-page-link", function (e) {
