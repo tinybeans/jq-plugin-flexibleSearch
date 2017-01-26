@@ -654,7 +654,16 @@
                         else {
                             return "";
                         }
-                    }
+                    },
+                    currentCountFrom: function () {
+                        return offset - 0 + 1;
+                    },
+                    currentCountTo: function () {
+                        var num = offset - 0 + limit;
+                        var res = num < resultJSON.totalResults ? num : resultJSON.totalResults;
+                        return res - 0;
+                    },
+                    totalResults: resultJSON.totalResults
                 };
                 var paginateHTML = Mustache.render(paginateTmpl, paginateJSON);
 
