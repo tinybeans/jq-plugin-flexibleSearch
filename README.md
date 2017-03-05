@@ -760,7 +760,7 @@ resultMsgInsertMethods: [
 **設定例**
 
 ```
-paginateId: "{{#keywordArray}}{{.}} {{/keywordArray}}の検索結果",
+resultMetaTitleTmpl: "{{#keywordArray}}{{.}} {{/keywordArray}}の検索結果",
 ```
 
 ### <a name="paginateId"></a>paginateId
