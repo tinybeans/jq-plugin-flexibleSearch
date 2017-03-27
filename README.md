@@ -216,6 +216,7 @@ dummy: null は不要ですが、最後のカンマを入れたり入れなか�
 | [submitAction](#submitAction) | Function | function (paramArray) { return paramArray; } | フォームがsubmitされ、ページが遷移する前に呼ばれる関数を設定できます。この関数にはシリアライズされたパラメータの配列paramArrayが渡されます。 |
 | [ajaxError](#ajaxError) | Function | function (jqXHR, textStatus, errorThrown) { window.alert(textStatus); } | jQuery.ajaxでエラーが起きたときに呼ばれる関数を設定できます。 |
 | [customSearch](#customSearch) | Function | null | 独自の検索ロジックを追加することができます。<br>(Add: v2.2.0)  |
+| [customSort](#customSort) | Function | null | `sortBy` パラメータとは別に複雑なソート処理などを加えることができます。<br>(Add: v2.2.3)  |
 | [modifyResultJSON](#modifyResultJSON) | Function | null | 検索結果をHTMLに出力する直前にJSONを加工することができます。<br>(Add: v2.2.0)  |
 | [modifyResultMsgHTML](#modifyResultMsgHTML) | Function | null | 検索結果メッセージのHTMLを加工することができます。 |
 | [modifyResultItemHTML](#modifyResultItemHTML) | Function | null | 検索結果一覧のHTMLを加工することができます。 |
@@ -979,6 +980,22 @@ customSearch: function(item, paramObj){
     return item.age >= 20;
 },
 ```
+
+### <a name="customSort"></a>customSort <span style="font-size: 0.7em;">(version added: 2.2.3)</span>
+
+通常の検索と独自の検索ロジックで絞り込まれた JSON に対して処理を加えることができます。 `sortBy` パラメータとは別に複数条件による複雑なソート処理などを加える場合はこのオプションを利用します。このオプションはv2.2.3で追加されました。
+
+このオプションで設定した関数には、通常の検索と独自の検索ロジックで絞り込まれた JSON が渡されます。この JSON に処理を加えて、 `return` で返却します。
+
+```
+function(json){
+  // do something
+  return json;
+}
+```
+
+ - json : 通常の検索と独自の検索ロジックで絞り込まれた JSON
+
 
 ### <a name="modifyResultJSON"></a>modifyResultJSON <span style="font-size: 0.7em;">(version added: 2.2.0)</span>
 
