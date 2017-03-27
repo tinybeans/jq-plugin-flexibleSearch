@@ -4,7 +4,7 @@
 * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2015-12-11
+* Update : 2017-01-26
 * Version: 2.2.2
 * Comment: Please use this with Movable Type :)
 *
@@ -371,7 +371,7 @@
         var paramExistArry = [];
         var advancedSearchObj = {};
         var offset = 0;
-        var limit = 10;
+        var limit = (op.limit !== null && typeof op.limit === 'number') ? op.limit: 10;
         var sortBy = "";
         var sortOrder = "";
         var sortType = "";
@@ -398,10 +398,7 @@
                     offset = value;
                     break;
                 case "limit":
-                    limit = value;
-                    if (op.limit !== null && typeof op.limit === 'number') {
-                        limit = op.limit;
-                    }
+                    limit = (op.limit !== null && typeof op.limit === 'number') ? op.limit: value;
                     break;
                 case "dataId":
                     dataId = value;
@@ -657,7 +654,16 @@
                         else {
                             return "";
                         }
-                    }
+                    },
+                    currentCountFrom: function () {
+                        return offset - 0 + 1;
+                    },
+                    currentCountTo: function () {
+                        var num = offset - 0 + limit;
+                        var res = num < resultJSON.totalResults ? num : resultJSON.totalResults;
+                        return res - 0;
+                    },
+                    totalResults: resultJSON.totalResults
                 };
                 var paginateHTML = Mustache.render(paginateTmpl, paginateJSON);
 
