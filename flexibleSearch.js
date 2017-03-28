@@ -4,7 +4,7 @@
 * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2017-03-27
+* Update : 2017-03-28
 * Version: 2.2.3
 * Comment: Please use this with Movable Type :)
 *
@@ -648,6 +648,9 @@
                             return "";
                         }
                     },
+                    lastPage: function () {
+                        return paginateJSON.page.length;
+                    },
                     currentLink: function () {
                         if (this.pageNumber === currentPage) {
                             return 'fs-current-link';
@@ -670,7 +673,9 @@
                         var res = num < resultJSON.totalResults ? num : resultJSON.totalResults;
                         return res - 0;
                     },
-                    totalResults: resultJSON.totalResults
+                    totalResults: resultJSON.totalResults,
+                    count: resultJSON.totalResults,
+                    currentPage: currentPage
                 };
                 var paginateHTML = Mustache.render(paginateTmpl, paginateJSON);
 
