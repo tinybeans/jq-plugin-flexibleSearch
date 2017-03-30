@@ -4,7 +4,7 @@
 * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2017-03-28
+* Update : 2017-03-31
 * Version: 2.2.3
 * Comment: Please use this with Movable Type :)
 *
@@ -307,6 +307,11 @@
         });
 
         var paramStr = decodeURIComponent(location.search.replace(/^\?/, ""));
+
+        // Set initial parameters
+        if (paramStr === '' && op.initialParameter !== null && typeof op.initialParameter === 'string') {
+            paramStr = decodeURIComponent(op.initialParameter.replace(/^\?/, ""));
+        }
 
         //
         //  Get parameters and serialize parameters </end>
@@ -698,15 +703,17 @@
                 var resultMsgHTML = Mustache.render(resultMsgTmpl, resultMsgObj);
 
                 // Set the meta title
-                var resultMetaTitleTmpl = (op.resultMetaTitleTmpl) ? op.resultMetaTitleTmpl : [
-                    // '{{#keywords}}{{keywords}}{{/keywords}}',
-                    '{{#keywordArray}}{{.}} {{/keywordArray}}',
-                    '{{#count}} {{count}}件{{/count}}',
-                    '{{#count}} {{currentPage}}/{{lastPage}}{{/count}}',
-                    '{{#metaTitle}} | {{metaTitle}}{{/metaTitle}}'
-                ].join("");
-                var resultMetaTitleHTML = Mustache.render(resultMetaTitleTmpl, resultMsgObj);
-                document.title = resultMetaTitleHTML;
+                if (op.resultMetaTitleRewrite) {
+                    var resultMetaTitleTmpl = (op.resultMetaTitleTmpl) ? op.resultMetaTitleTmpl : [
+                            // '{{#keywords}}{{keywords}}{{/keywords}}',
+                            '{{#keywordArray}}{{.}} {{/keywordArray}}',
+                            '{{#count}} {{count}}件{{/count}}',
+                            '{{#count}} {{currentPage}}/{{lastPage}}{{/count}}',
+                            '{{#metaTitle}} | {{metaTitle}}{{/metaTitle}}'
+                        ].join("");
+                    var resultMetaTitleHTML = Mustache.render(resultMetaTitleTmpl, resultMsgObj);
+                    document.title = resultMetaTitleHTML;
+                }
 
                 // Show result
                 if (op.modifyResultJSON !== null && typeof op.modifyResultJSON === "function") {
@@ -768,13 +775,14 @@
                         var page = $(this).attr("title");
                         var offset = (Number(page) - 1) * Number(limit);
                         offset = "offset=" + offset;
-                        var url = location.href.split("?");
-                        var query = url[1].replace(/offset=[0-9]+/, offset);
-                        if(query.indexOf('offset=') < 0){
+                        var url = location.href.replace(/\?.*/g, '');
+                        var query = location.search ? location.search.replace(/^\?/, '') : op.initialParameter;
+                        query = query.replace(/offset=[0-9]+/, offset);
+                        if (query.indexOf('offset=') === -1) {
                             query += '&' + offset;
                         }
                         query = query.replace(/&offset=0/, '');
-                        location.href = url[0] + "?" + query;
+                        location.href = url + "?" + query;
                     })
                     .on("click", "a.fs-turn-page-link", function (e) {
                         e.preventDefault();
@@ -895,6 +903,7 @@
         // -----------------------------------------------------------------------
     };
     $.fn.flexibleSearch.defaults = {
+        initialParameter: null,
         // The limit parameter is overwritten and locked as this value.
         limit: null,
         // Path
@@ -931,6 +940,7 @@
         resultMsgClassName: "fs-result-msg",
         resultMsgTmpl: null,
 
+        resultMetaTitleRewrite: true,
         resultMetaTitleTmpl: null,
 
         // You can set an array including plane object which has two properties,
