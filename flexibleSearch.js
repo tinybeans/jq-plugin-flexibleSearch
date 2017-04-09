@@ -688,8 +688,8 @@
                 var resultMsgObj = {
                     id: op.resultMsgId ? op.resultMsgId : '',
                     classname: op.resultMsgClassName ? op.resultMsgClassName : '',
-                    keywords: searchWords.join(", "),
-                    keywordArray: searchWords,
+                    keywords: searchWords.join(', '),
+                    keywordArray: searchWords.join('') !== '' ? searchWords : null,
                     count: resultJSON.totalResults,
                     metaTitle: document.title,
                     firstPage: function () {
