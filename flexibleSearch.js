@@ -4,7 +4,7 @@
 * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2017-03-31
+* Update : 2017-04-16
 * Version: 2.2.3
 * Comment: Please use this with Movable Type :)
 *
@@ -294,7 +294,7 @@
             var params = $(this).serializeArray();
             for (var i = -1, n = params.length; ++i < n;) {
                 if (params[i].name === "search") {
-                    params[i].value = $.trim(params[i].value.replace("　", " "));
+                    params[i].value = $.trim(params[i].value.replace(/　/g, " "));
                 }
             }
             params = op.submitAction(params);
@@ -436,7 +436,7 @@
                         }
                         else if (type === "text" || type === "search" || type === "hidden") {
                             if (key === "search") {
-                                $(this).val(value.replace("+"," "));
+                                $(this).val(value.replace(/+/g," "));
                             } else {
                                 $(this).val(value);
                             }
