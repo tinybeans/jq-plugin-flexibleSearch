@@ -436,7 +436,7 @@
                         }
                         else if (type === "text" || type === "search" || type === "hidden") {
                             if (key === "search") {
-                                $(this).val(value.replace(/+/g," "));
+                                $(this).val(value.replace(/\+/g," "));
                             } else {
                                 $(this).val(value);
                             }
