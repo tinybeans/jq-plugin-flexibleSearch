@@ -759,7 +759,10 @@
                 // Add result items HTML
                 resultAllHTML += resultItemHTML;
                 // Add paginate HTML
-                if (op.paginateInsertMethods === null) {
+                if (realMaxPageCount === 1 && op.hideOnePagePaginate === true) {
+                    // nothing to do
+                }
+                else if (op.paginateInsertMethods === null) {
                     resultAllHTML += paginateHTML;
                 }
 
@@ -773,7 +776,10 @@
                     }
                 }
                 // Add paginate HTML to DOM
-                if (op.paginateInsertMethods !== null) {
+                if (realMaxPageCount === 1 && op.hideOnePagePaginate === true) {
+                    // nothing to do
+                }
+                else if (op.paginateInsertMethods !== null) {
                     for (var i = 0, l = op.paginateInsertMethods.length; i < l; i++) {
                         $(op.paginateInsertMethods[i].selector)[op.paginateInsertMethods[i].method](paginateHTML);
                     }
@@ -998,6 +1004,8 @@
         prevPageText: 'Prev',
         nextPageText: 'Next',
         maxPageCount: 10,
+        // If you want to hide one page pagination, set true.
+        hideOnePagePaginate: false,
         // You can set an array including plane object which has two properties,
         // method property and selector property.
         // e.g.
