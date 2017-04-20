@@ -4,8 +4,8 @@
 * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
 *
 * Since  : 2010-11-12
-* Update : 2017-04-16
 * Version: 2.2.4
+* Update : 2017-04-20
 * Comment: Please use this with Movable Type :)
 *
 * You have to include "mustache.js" before "flexibleSearch.js".
@@ -375,8 +375,8 @@
         var paramObj = {};
         var paramExistArry = [];
         var advancedSearchObj = {};
-        var offset = 0;
         var limit = (op.limit !== null && typeof op.limit === 'number') ? op.limit: 10;
+        var offset = 0;
         var sortBy = "";
         var sortOrder = "";
         var sortType = "";
@@ -384,6 +384,9 @@
         var dataId = "";
         var api = false;
         var excludeParams = ["search", "dataId", "offset", "limit", "sortBy", "sortOrder", "sortType"];
+        if (op.simplePaginate === true) {
+            excludeParams.push("page");
+        }
         if (op.excludeParams !== null) {
             $.merge(excludeParams, op.excludeParams.toLowerCase().split(","));
         }
@@ -423,6 +426,9 @@
             if (key === "offset" || key === "limit") {
                 continue;
             }
+            if (op.simplePaginate === true && key === "page") {
+                continue;
+            }
             $this.find("[name='" + key + "']").each(function () {
                 var tagname = this.tagName.toLowerCase();
                 switch (tagname) {
@@ -456,7 +462,7 @@
             });
 
             // Set advancedSearchObj. This object is used in original search.
-            if (value !== "" ) {
+            if (value !== "") {
                 value = value.replace(/\+/g, " ");
                 if ($.inArray(key, excludeParams) !== -1) {
                     continue;
@@ -470,6 +476,17 @@
             }
             paramExistArry.push(key);
         } // for
+
+        // For simple paginate option
+        if (op.simplePaginate === true && typeof paramObj["page"] !== 'undefined') {
+            if (/all/i.test(paramObj["page"])) {
+                offset = 0;
+                limit = 100000000;
+            }
+            else {
+                offset = (paramObj["page"] - 1) * limit;
+            }
+        }
 
         // Set paramKeyCount
         var paramKeyCount = 0;
@@ -774,15 +791,30 @@
                         e.preventDefault();
                         var page = $(this).attr("title");
                         var offset = (Number(page) - 1) * Number(limit);
-                        offset = "offset=" + offset;
                         var url = location.href.replace(/\?.*/g, '');
                         var query = location.search ? location.search.replace(/^\?/, '') : op.initialParameter;
-                        query = query.replace(/offset=[0-9]+/, offset);
-                        if (query.indexOf('offset=') === -1) {
-                            query += '&' + offset;
+                        if (op.simplePaginate === true) {
+                            if (query.indexOf('page=') === -1) {
+                                query += query ? '&page=' + page : 'page=' + page;
+                            }
+                            else {
+                                query = query.replace(/page=[0-9]+/, 'page=' + page);
+                            }
+                            query = query.replace(/&?offset=[0-9]+/g, '');
                         }
-                        query = query.replace(/&offset=0/, '');
-                        location.href = url + "?" + query;
+                        else {
+                            if (query.indexOf('offset=') === -1) {
+                                query += query ? '&offset=' + offset : 'offset=' + offset;
+                            }
+                            else {
+                                query = query.replace(/offset=[0-9]+/, 'offset=' + offset);
+                            }
+                            query = query.replace(/&?offset=0/, '');
+                        }
+                        if (query) {
+                            url += "?" + query.replace(/^&+/, '');
+                        }
+                        location.href = url;
                     })
                     .on("click", "a.fs-turn-page-link", function (e) {
                         e.preventDefault();
@@ -906,6 +938,8 @@
         initialParameter: null,
         // The limit parameter is overwritten and locked as this value.
         limit: null,
+        // If you want to use 'page' parameter without 'limit' and 'offset', set true to this option.
+        simplePaginate: false,
         // Path
         searchDataPath: "/flexibleSearch/search.json",
         searchDataPathPreload: null,
