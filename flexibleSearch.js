@@ -1,17 +1,17 @@
 /*
-* flexibleSearch.js
-*
-* Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
-*
-* Since  : 2010-11-12
-* Version: 2.2.4
-* Update : 2017-04-20
-* Comment: Please use this with Movable Type :)
-*
-* You have to include "mustache.js" before "flexibleSearch.js".
-* Maybe... jQuery 1.7.x later
-*
-*/
+ * flexibleSearch.js
+ *
+ * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
+ *
+ * Since  : 2010-11-12
+ * Update : 2017-05-02
+ * Version: 2.3.0
+ * Comment: Please use this with Movable Type :)
+ *
+ * You have to include "mustache.js" before "flexibleSearch.js".
+ * Maybe... jQuery 1.7.x later
+ *
+-*/
 
 (function ($) {
     $.fn.flexibleSearch = function (options) {
@@ -584,7 +584,7 @@
 
                     // Custom Sort
                     if (op.customSort !== null && typeof op.customSort === "function") {
-                        cloneItems = op.customSort(cloneItems);
+                        cloneItems = op.customSort(cloneItems, paramObj);
                     }
 
                     resultJSON.items = $.grep(cloneItems, function (item, i) {
@@ -669,6 +669,9 @@
                         else {
                             return "";
                         }
+                    },
+                    isCurrent: function(){
+                      return this.pageNumber === currentPage;
                     },
                     lastPage: function () {
                         return paginateJSON.page.length;
