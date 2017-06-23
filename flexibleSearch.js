@@ -294,7 +294,7 @@
             var params = $(this).serializeArray();
             for (var i = -1, n = params.length; ++i < n;) {
                 if (params[i].name === "search") {
-                    params[i].value = $.trim(params[i].value.replace(/　/g, " "));
+                    params[i].value = $.trim(params[i].value.replace(/[ |　]+/g, " "));
                 }
             }
             params = op.submitAction(params);
