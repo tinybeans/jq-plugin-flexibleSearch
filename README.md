@@ -213,8 +213,8 @@ dummy: null は不要ですが、最後のカンマを入れたり入れなか�
 | [nextPageText](#nextPageText) | String | "Next" | ページ分割の次のページへ送るリンクのテキストを指定します。<br>(Add: v2.2.0)  |
 | [maxPageCount](#maxPageCount) | Number | 10 | ページ分割時に表示する最大ページ数を指定します。例えば、maxPageCountオプションを10に設定して、検索結果が全部で30ページになったとすると、そのうちの、現在のページを中心にして最大何ページ表示するか、という意味です。<br>(Add: v2.2.0)  |
 | [paginateInsertMethods](#paginateInsertMethods) | Array | null | ページ分割ナビゲーションを表示する要素のセレクタと挿入方法を指定します。<br>(Add: v2.2.0)  |
-| [initialParameter](#initialParameter) | String | null | flexibleSearch を適用しているページにパラメータが無い場合でも、flexibleSearch を動かすためのパラメータを設定することができます。<br>(Add: v2.3.0)  |
-| [resultMetaTitleRewrite](#resultMetaTitleRewrite) | Boolean | true | メタタイトルの書き換えを無効ににできます。<br>(Add: v2.3.0)  |
+| [initialParameter](#initialParameter) | String | null | flexibleSearch を適用しているページにパラメータが無い場合でも、flexibleSearch を動かすためのパラメータを設定することができます。<br>(Add: v2.2.3)  |
+| [resultMetaTitleRewrite](#resultMetaTitleRewrite) | Boolean | true | メタタイトルの書き換えを無効ににできます。<br>(Add: v2.2.3)  |
 | [submitAction](#submitAction) | Function | function (paramArray) { return paramArray; } | フォームがsubmitされ、ページが遷移する前に呼ばれる関数を設定できます。この関数にはシリアライズされたパラメータの配列paramArrayが渡されます。 |
 | [ajaxError](#ajaxError) | Function | function (jqXHR, textStatus, errorThrown) { window.alert(textStatus); } | jQuery.ajaxでエラーが起きたときに呼ばれる関数を設定できます。 |
 | [customSearch](#customSearch) | Function | null | 独自の検索ロジックを追加することができます。<br>(Add: v2.2.0)  |
@@ -920,7 +920,7 @@ paginateInsertMethods: [
 ],
 ```
 
-### <a name="initialParameter"></a>initialParameter <span style="font-size: 0.7em;">(version added: 2.3.0)</span>
+### <a name="initialParameter"></a>initialParameter <span style="font-size: 0.7em;">(version added: 2.2.3)</span>
 
 flexibleSearch を適用しているページにパラメータが無い場合でも、flexibleSearch を動かすためのパラメータを設定することができます。
 
@@ -932,7 +932,7 @@ flexibleSearch を適用しているページにパラメータが無い場合�
 initialParameter: 'limit=10&offset=0'
 ```
 
-### <a name="resultMetaTitleRewrite"></a>resultMetaTitleRewrite <span style="font-size: 0.7em;">(version added: 2.3.0)</span>
+### <a name="resultMetaTitleRewrite"></a>resultMetaTitleRewrite <span style="font-size: 0.7em;">(version added: 2.2.3)</span>
 
 `resultMetaTitleRewrite` オプションに `false` を設定すると、flexibleSearch.js によるメタタイトルの書き換えが無効になります。
 

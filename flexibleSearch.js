@@ -4,8 +4,8 @@
  * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
  *
  * Since  : 2010-11-12
- * Update : 2017-06-24
- * Version: 2.3.1
+ * Update : 2019-11-05
+ * Version: 2.4.0
  * Comment: Please use this with Movable Type :)
  *
  * You have to include "mustache.js" before "flexibleSearch.js".
@@ -718,7 +718,8 @@
                     lastPage: function () {
                         return paginateJSON.page.length;
                     },
-                    currentPage: currentPage
+                    currentPage: currentPage,
+                    param: paramObj
                 };
                 var resultMsgHTML = Mustache.render(resultMsgTmpl, resultMsgObj);
 
@@ -795,45 +796,44 @@
 
                 // Bind pageLink() to paginate link
                 var paginateSelector = op.paginateId ? "#" + op.paginateId : "." + op.paginateClassName;
-                $(paginateSelector)
-                    .on("click", "a.fs-page-link", function (e) {
-                        e.preventDefault();
-                        var page = $(this).attr("title");
-                        var offset = (Number(page) - 1) * Number(limit);
-                        var url = location.href.replace(/\?.*/g, '');
-                        var query = location.search ? location.search.replace(/^\?/, '') : op.initialParameter;
-                        if (op.simplePaginate === true) {
-                            if (query.indexOf('page=') === -1) {
-                                query += query ? '&page=' + page : 'page=' + page;
-                            }
-                            else {
-                                query = query.replace(/page=[0-9]+/, 'page=' + page);
-                            }
-                            query = query.replace(/&?offset=[0-9]+/g, '');
+                $(paginateSelector + " a.fs-page-link").on("click", function (e) {
+                    e.preventDefault();
+                    var page = $(this).attr("title");
+                    var offset = (Number(page) - 1) * Number(limit);
+                    var url = location.href.replace(/\?.*/g, '');
+                    var query = location.search ? location.search.replace(/^\?/, '') : op.initialParameter;
+                    if (op.simplePaginate === true) {
+                        if (query.indexOf('page=') === -1) {
+                            query += query ? '&page=' + page : 'page=' + page;
                         }
                         else {
-                            if (query.indexOf('offset=') === -1) {
-                                query += query ? '&offset=' + offset : 'offset=' + offset;
-                            }
-                            else {
-                                query = query.replace(/offset=[0-9]+/, 'offset=' + offset);
-                            }
-                            query = query.replace(/&?offset=0/, '');
+                            query = query.replace(/page=[0-9]+/, 'page=' + page);
                         }
-                        if (query) {
-                            url += "?" + query.replace(/^&+/, '');
+                        query = query.replace(/&?offset=[0-9]+/g, '');
+                    }
+                    else {
+                        if (query.indexOf('offset=') === -1) {
+                            query += query ? '&offset=' + offset : 'offset=' + offset;
                         }
-                        location.href = url;
-                    })
-                    .on("click", "a.fs-turn-page-link", function (e) {
-                        e.preventDefault();
-                        if ($(this).hasClass('fs-prev-link')) {
-                            $(e.delegateTarget).find('.fs-current-prev-link').trigger('click');
+                        else {
+                            query = query.replace(/offset=[0-9]+/, 'offset=' + offset);
                         }
-                        else if ($(this).hasClass('fs-next-link')) {
-                            $(e.delegateTarget).find('.fs-current-next-link').trigger('click');
-                        }
-                    });
+                        query = query.replace(/&?offset=0/, '');
+                    }
+                    if (query) {
+                        url += "?" + query.replace(/^&+/, '');
+                    }
+                    location.href = url;
+                });
+                $(paginateSelector + " a.fs-turn-page-link").on("click", function (e) {
+                    e.preventDefault();
+                    if ($(this).hasClass('fs-prev-link')) {
+                        $(paginateSelector).find('.fs-current-prev-link').trigger('click');
+                    }
+                    else if ($(this).hasClass('fs-next-link')) {
+                        $(paginateSelector).find('.fs-current-next-link').trigger('click');
+                    }
+                });
             } // success
         }); // ajax
 
