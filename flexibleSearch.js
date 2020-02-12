@@ -1,18 +1,16 @@
-/*
+/**!
  * flexibleSearch.js
  *
  * Copyright (c) Tomohiro Okuwaki / bit part LLC (http://bit-part.net/)
  *
  * Since  : 2010-11-12
- * Update : 2019-11-05
- * Version: 2.4.0
+ * Update : 2020-02-12
+ * Version: 2.5.0
  * Comment: Please use this with Movable Type :)
  *
  * You have to include "mustache.js" before "flexibleSearch.js".
  * Maybe... jQuery 1.7.x later
- *
--*/
-
+ */
 (function ($) {
     $.fn.flexibleSearch = function (options) {
         var op = $.extend({}, $.fn.flexibleSearch.defaults, options);
@@ -384,6 +382,7 @@
         var dataId = "";
         var api = false;
         var excludeParams = ["search", "dataId", "offset", "limit", "sortBy", "sortOrder", "sortType"];
+        var excludeSearchParams = op.excludeSearchParams ? op.excludeSearchParams.split(',') : [];
         if (op.simplePaginate === true) {
             excludeParams.push("page");
         }
@@ -899,6 +898,9 @@
                 var reg = new RegExp(keywordsArray[i].replace(/([.*+?^=!:${}()|[\]\/\\])/g, "\\$1"), "i");
                 // if (reg.test(obj[key])) keyMatch++;
                 for (var key in obj) {
+                    if ($.inArray(key, excludeSearchParams) !== -1) {
+                        continue;
+                    }
                     if (reg.test(obj[key])) {
                         keywordsMutchCount++;
                         break;
@@ -1057,6 +1059,7 @@
         resultComplete: null,
 
         excludeParams: null,
+        excludeSearchParams: null,
         dummy: false
     };
 })(jQuery);
