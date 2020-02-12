@@ -225,6 +225,7 @@ dummy: null は不要ですが、最後のカンマを入れたり入れなか�
 | [modifyPaginateHTML](#modifyPaginateHTML) | Function | null | ページ分割のHTMLを加工することができます。 |
 | [resultComplete](#resultComplete) | Function | null | 検索結果をページのDOMに挿入した後に呼ばれる関数を設定します。 |
 | [excludeParams](#excludeParams) | String | null | パラメータのうち検索から除外する項目をカンマ区切りで指定します。 |
+| [excludeSearchParams](#excludeSearchParams) | String | null | JSON の項目のうちキーワード検索の対象から除外する項目をカンマ区切りで指定します。 |
 
 ### <a name="limit"></a>limit <span style="font-size: 0.7em;">(version added: 2.2.0)</span>
 
@@ -1180,4 +1181,14 @@ excludeParamsにはあらかじめ下記の項目が設定されています。�
 
 ```
 excludeParams: "tags,prices",
+```
+
+### <a name="excludeSearchParams"></a>excludeSearchParams
+
+JSON の項目のうちキーワード検索の対象から除外する項目をカンマ区切りで指定します。
+
+**設定例**
+
+```
+excludeSearchParams: "title,keywords",
 ```
