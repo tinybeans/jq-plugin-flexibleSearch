@@ -180,7 +180,7 @@ dummy: null は不要ですが、最後のカンマを入れたり入れなか�
 
 | オプション名 | 設定値 | 初期値 | 説明 |
 |:--|:--|:--|:--|
-| [limit](#limit) | Number | null | limit オプションを指定すると URL の limit パラメータは無視され、ここで指定した値が常に優先されます。<br>(Add: v2.2.0)  |
+| [limit](#limit) | Number | null | limit オプションを指定すると URL の limit パラメータは無視され、ここで指定した値が常に優先されます。この `limit` オプションも URL パラメータの `limit` パラメータもどちらも指定がない場合は `10` がセットされた状態となります。<br>(Add: v2.2.0)  |
 | [searchDataPath](#searchDataPath) | String<br>Object | "/flexibleSearch/search.json"  | flexibleSearchで検索対象とするJSONファイルのパスを指定します。文字列で１つ指定する方法と、オブジェクトで複数指定する方法があります。 |
 | [searchDataPathPreload](#searchDataPathPreload) | String<br>Array<br>Object | "/flexibleSearch/search.json" | 検索実行ページ以外で、検索対象とするJSONファイルをあらかじめ読み込んでおきキャッシュすることができます。文字列で１つ指定する方法と、配列またはオブジェクトで複数指定する方法があります。 |
 | [dataApiDataIds](#dataApiDataIds) | String | null | MTのData APIを利用するdataIdを指定します。複数ある場合はカンマ区切りで指定します。dataIdとは、searchDataPathオプションをオブジェクトで指定した場合のプロパティ名のことを指します。 |
@@ -231,12 +231,14 @@ dummy: null は不要ですが、最後のカンマを入れたり入れなか�
 
 limitオプションを指定するとURLのlimitパラメータは無視され、ここで指定した値が常に優先されます。このオプションはv2.2.0で追加されました。
 
+なお、この `limit` オプションと URL パラメータの `limit` パラメータのどちらも指定がない場合は `limit` は `10` がセットされた状態となります。
+
 searchFormCreationオプションがtrueのときに書き出されるフォームのlimit値、つまりlimitパラメータの値は [paginateCount](#paginateCount) で指定してください。
 
 **設定例**
 
 ```
-limit: 10,
+limit: 20,
 ```
 
 ### <a name="searchDataPath"></a>searchDataPath

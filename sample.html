@@ -1,132 +1,130 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>flexibleSearch.js</title>
+    <meta charset="UTF-8">
+    <title>flexibleSearch.js</title>
 </head>
 <body>
-<h1>flexibleSearch.js</h1>
-<h2>あらかじめ用意したJSONファイルを検索することにより超高速JavaScript検索を実現するjQueryプラグインです。</h2>
+<h1>検索結果</h1>
 <div id="search"></div>
 <div id="fs-result"></div>
 
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="/flexibleSearch/mustache.js"></script>
-<script src="/flexibleSearch/flexibleSearch.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="./mustache.js"></script>
+<script src="./flexibleSearch.js"></script>
 <script>
-  (function ($) {
-    $("#search").flexibleSearch({
-      // // The limit parameter is overwritten and locked as this value.
-      // limit: null,
-      // // Path
-      // searchDataPath: "/flexibleSearch/search.json",
-      // searchDataPathPreload: null,
+    (function ($) {
+        $("#search").flexibleSearch({
+            // // The limit parameter is overwritten and locked as this value.
+            // limit: null,
+            // // Path
+            searchDataPath: "./search.json",
+            // searchDataPathPreload: null,
 
-      // // Data API
-      // dataApiDataIds: null,
-      // dataApiParams: null,
+            // // Data API
+            // dataApiDataIds: null,
+            // dataApiParams: null,
 
-      // // Performance
-      // cache:  true, // I recommend "true".
+            // // Performance
+            // cache:  true, // I recommend "true".
 
-      // // Search Form
-      // searchFormCreation: true,
-      // searchFormHTML: null,
-      // searchFormAction: "",
-      // searchFormInputType: "search",
-      // searchFormInputPlaceholder: "Search words",
-      // searchFormSubmitBtnText: "Search",
+            // // Search Form
+            // searchFormCreation: true,
+            // searchFormHTML: null,
+            // searchFormAction: "",
+            // searchFormInputType: "search",
+            // searchFormInputPlaceholder: "Search words",
+            // searchFormSubmitBtnText: "Search",
 
-      // // Advanced Search Form
-      // advancedFormObj: null,
-      // advancedSearchCond: 'OR', // 'AND'
+            // // Advanced Search Form
+            // advancedFormObj: null,
+            // advancedSearchCond: 'OR', // 'AND'
 
-      // // Result Block
-      // loadingImgPath: "/flexibleSearch/loading.gif",
-      // loadingImgHTML: null,
+            // // Result Block
+            // loadingImgPath: "/flexibleSearch/loading.gif",
+            // loadingImgHTML: null,
 
-      // resultBlockId: "fs-result",
-      // resultItemTmpl: null,
+            // resultBlockId: "fs-result",
+            // resultItemTmpl: null,
 
-      // resultMsgId: null,
-      // resultMsgClassName: "fs-result-msg",
-      // resultMsgTmpl: null,
+            // resultMsgId: null,
+            // resultMsgClassName: "fs-result-msg",
+            // resultMsgTmpl: null,
 
-      // resultMetaTitleTmpl: null,
+            // resultMetaTitleTmpl: null,
 
-      // // You can set an array including plane object which has two properties,
-      // // method property and selector property.
-      // // e.g.
-      // //     resultMsgInsertMethods: [
-      // //         {
-      // //             "selector": "foo",
-      // //             "method": "append"
-      // //         }
-      // //     ],
-      // resultMsgInsertMethods: null,
+            // // You can set an array including plane object which has two properties,
+            // // method property and selector property.
+            // // e.g.
+            // //     resultMsgInsertMethods: [
+            // //         {
+            // //             "selector": "foo",
+            // //             "method": "append"
+            // //         }
+            // //     ],
+            // resultMsgInsertMethods: null,
 
-      // // Paginate
-      // paginateId: null,
-      // paginateClassName: "fs-paginate",
-      // paginateTmpl: null,
-      // paginateCount: 10,
-      // hidePageNumber: false,
-      // showTurnPage: true,
-      // prevPageText: 'Prev',
-      // nextPageText: 'Next',
-      // maxPageCount: 10,
-      // // You can set an array including plane object which has two properties,
-      // // method property and selector property.
-      // // e.g.
-      // //     paginateInsertMethods: [
-      // //         {
-      // //             "selector": "foo",
-      // //             "method": "append"
-      // //         }
-      // //     ],
-      // paginateInsertMethods: null,
+            // // Paginate
+            // paginateId: null,
+            // paginateClassName: "fs-paginate",
+            // paginateTmpl: null,
+            // paginateCount: 10,
+            // hidePageNumber: false,
+            // showTurnPage: true,
+            // prevPageText: 'Prev',
+            // nextPageText: 'Next',
+            // maxPageCount: 10,
+            // // You can set an array including plane object which has two properties,
+            // // method property and selector property.
+            // // e.g.
+            // //     paginateInsertMethods: [
+            // //         {
+            // //             "selector": "foo",
+            // //             "method": "append"
+            // //         }
+            // //     ],
+            // paginateInsertMethods: null,
 
-      // // Submit
-      // submitAction: function (paramArray) {
-      //     return paramArray;
-      // },
+            // // Submit
+            // submitAction: function (paramArray) {
+            //     return paramArray;
+            // },
 
-      // // Ajax
-      // ajaxError: function (jqXHR, textStatus, errorThrown) {
-      //     window.alert(textStatus);
-      // },
+            // // Ajax
+            // ajaxError: function (jqXHR, textStatus, errorThrown) {
+            //     window.alert(textStatus);
+            // },
 
-      // // Callbacks
+            // // Callbacks
 
-      // // you can search in your logic.
-      // // e.g.
-      // //     customSearch: function(item, paramObj){
-      // //         // item : Each item in items
-      // //         // paramObj : Plane object of parameters
-      // //         // The item is removed when return false
-      // //         return true or false;
-      // //     },
-      // customSearch: null,
+            // // you can search in your logic.
+            // // e.g.
+            // //     customSearch: function(item, paramObj){
+            // //         // item : Each item in items
+            // //         // paramObj : Plane object of parameters
+            // //         // The item is removed when return false
+            // //         return true or false;
+            // //     },
+            // customSearch: null,
 
-      // // You can modify the search result JSON.
-      // // e.g.
-      // //     modifyResultJSON = function(json){
-      // //         json["fullName"] = function(){
-      // //             return this.firstName + " " + this.lastName;
-      // //         };
-      // //         return json;
-      // //     },
-      // modifyResultJSON: null,
-      // modifyResultMsgHTML: null,
-      // modifyResultItemHTML: null,
-      // modifyPaginateHTML: null,
-      // resultComplete: null,
+            // // You can modify the search result JSON.
+            // // e.g.
+            // //     modifyResultJSON = function(json){
+            // //         json["fullName"] = function(){
+            // //             return this.firstName + " " + this.lastName;
+            // //         };
+            // //         return json;
+            // //     },
+            // modifyResultJSON: null,
+            // modifyResultMsgHTML: null,
+            // modifyResultItemHTML: null,
+            // modifyPaginateHTML: null,
+            // resultComplete: null,
 
-      // excludeParams: null,
-      // excludeSearchParams: null,
-      dummy: false
-    });
-  })(jQuery);
+            // excludeParams: null,
+            dummy: false
+        });
+    })(jQuery);
 </script>
 </body>
 </html>
