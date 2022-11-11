@@ -660,7 +660,7 @@ Mustacheテンプレートの書き方は [janl/mustache.js](https://github.com/
 
 ```
 resultItemTmpl: [
-	'<div id="' + op.resultBlockId + '-items">',
+	'<div id="fs-result-items">',
     	'<ul>',
     	'{{#items}}',
         	'<li><a href="{{permalink}}">{{&title}}</a></li>',
